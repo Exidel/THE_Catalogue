@@ -1,7 +1,5 @@
 # THE_Catalogue
 
-# Description
-
 A highly specialized program for storing and sorting materials and related files.
 
 
