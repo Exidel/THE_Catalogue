@@ -12,6 +12,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
@@ -30,7 +33,7 @@ fun TextField(width: Dp) {
             value = tfText,
             onValueChange = { tfText = it },
             singleLine = true,
-            textStyle = TextStyle(BasicColors.textColor),
+            textStyle = Styles.textStyle,
             modifier = Modifier
                 .width(width)
                 .height(26.dp)

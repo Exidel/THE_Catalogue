@@ -44,13 +44,13 @@ fun TopBar() {
         }
 
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            LabelText(Labels().sort + ":")
+            Text(Labels().sort + ":", maxLines = 1, style = Styles.textStyle)
 
             DDMenu(list2, 150.dp, RoundedCornerShape(4.dp))
         }
 
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            LabelText(Labels().size + ":")
+            Text(Labels().size + ":", maxLines = 1, style = Styles.textStyle)
 
             //TODO() draggable point
         }

@@ -25,11 +25,11 @@ fun LeftNavigationColumn(modifier: Modifier) {
             .padding(10.dp)
     ) {
 
-        LabelText(Labels().firstDDLabel + ":")
+        Text(Labels().firstDDLabel + ":", maxLines = 1, style = Styles.textStyle)
 
         DDMenu(list, 230.dp, RoundedCornerShape(4.dp), enableAddButton = true)
 
-        LabelText(Labels().secondDDLabel + ":")
+        Text(Labels().secondDDLabel + ":", maxLines = 1, style = Styles.textStyle)
 
         DDMenu(list2, 230.dp, RoundedCornerShape(4.dp), enableAddButton = true)
 

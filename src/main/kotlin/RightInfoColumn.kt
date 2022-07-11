@@ -24,7 +24,7 @@ fun RightInfoColumn(modifier: Modifier) {
             .padding(10.dp)
     ) {
         itemsIndexed(list) { _index, _item ->
-            LabelText(_item, Modifier.fillMaxHeight())
+            Text(_item, Modifier.fillMaxHeight(), maxLines = 1, style = Styles.textStyle)
         }
     }
 

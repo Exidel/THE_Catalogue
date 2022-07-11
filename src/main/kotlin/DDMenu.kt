@@ -30,7 +30,7 @@ fun DDMenu(
 ) {
 
     var expand by remember { mutableStateOf(false) }
-    var text by remember { mutableStateOf(itemsList[0]) }
+    var text by remember { mutableStateOf(if (itemsList.isNotEmpty()) itemsList[0] else "") }
 
     Box(
         Modifier
@@ -40,8 +40,10 @@ fun DDMenu(
             .clickable { expand = !expand }
     ) {
 
-        LabelText(
+        Text(
             text = text,
+            maxLines = 1,
+            style = Styles.textStyle,
             modifier = Modifier
                 .fillMaxWidth()
                 .background(BasicColors.primaryBGColor, shape)
@@ -68,7 +70,7 @@ fun DDMenu(
                         .clickable { text = _item; expand = false }
                         .padding(horizontal = 10.dp, vertical = 4.dp)
                 ) {
-                    LabelText(_item)
+                    Text(_item, maxLines = 1, style = Styles.textStyle)
                 }
 
                 when {
@@ -85,7 +87,7 @@ fun DDMenu(
                         .clickable {  }
                         .padding(horizontal = 10.dp, vertical = 4.dp)
                 ) {
-                    LabelText(Labels().add, Modifier.align(Alignment.Center))
+                    Text(Labels().add, Modifier.align(Alignment.Center), maxLines = 1, style = Styles.textStyle)
                 }
             }
 
