@@ -22,7 +22,6 @@ fun TopBar() {
 
     val list1 = listOf("lib", "sublib", "whatever")
     val list2 = listOf("date", "name", "whatever")
-    var value by remember { mutableStateOf("") }
 
 
     Row(

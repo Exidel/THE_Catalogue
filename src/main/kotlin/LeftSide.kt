@@ -27,11 +27,11 @@ fun LeftNavigationColumn(modifier: Modifier) {
 
         LabelText(Labels().firstDDLabel + ":")
 
-        DDMenu(list, 230.dp, RoundedCornerShape(4.dp))
+        DDMenu(list, 230.dp, RoundedCornerShape(4.dp), enableAddButton = true)
 
         LabelText(Labels().secondDDLabel + ":")
 
-        DDMenu(list2, 230.dp, RoundedCornerShape(4.dp))
+        DDMenu(list2, 230.dp, RoundedCornerShape(4.dp), enableAddButton = true)
 
         Column(Modifier.fillMaxSize().border(2.dp, BasicColors.tertiaryBGColor, RoundedCornerShape(4.dp))) {}
 

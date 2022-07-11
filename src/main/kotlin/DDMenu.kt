@@ -55,9 +55,10 @@ fun DDMenu(
             expanded = expand,
             onDismissRequest = {expand = false},
             modifier = Modifier
+                .padding(vertical = 0.dp)
                 .width(width)
-                .background(BasicColors.primaryBGColor, shape)
-                .border(1.dp, BasicColors.tertiaryBGColor, shape)
+                .background(BasicColors.primaryBGColor, RoundedCornerShape(4.dp))
+                .border(1.dp, BasicColors.tertiaryBGColor, RoundedCornerShape(4.dp))
         ) {
 
             itemsList.forEachIndexed { _index, _item ->
@@ -70,17 +71,22 @@ fun DDMenu(
                     LabelText(_item)
                 }
 
-                Divider(color = BasicColors.tertiaryBGColor)
+                when {
+                    (itemsList.lastIndex == _index) && enableAddButton -> Divider(color = BasicColors.tertiaryBGColor)
+                    itemsList.lastIndex != _index -> Divider(color = BasicColors.tertiaryBGColor)
+                }
 
             }
 
-            Box(
-                Modifier
-                    .fillMaxWidth()
-                    .clickable { expand = false }
-                    .padding(horizontal = 10.dp, vertical = 4.dp)
-            ) {
-                LabelText(Labels().add, Modifier.align(Alignment.Center))
+            if (enableAddButton) {
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .clickable {  }
+                        .padding(horizontal = 10.dp, vertical = 4.dp)
+                ) {
+                    LabelText(Labels().add, Modifier.align(Alignment.Center))
+                }
             }
 
         }
