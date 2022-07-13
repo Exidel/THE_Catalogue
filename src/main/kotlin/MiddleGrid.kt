@@ -35,7 +35,7 @@ fun MiddleGrid() {
     val list = (1..10).map {it.toString()}
     val scrollState = rememberLazyListState(0)
     var size by remember { mutableStateOf(128.dp) }
-    val path: String = "Resources\\lib2\\lib2cat3\\lib2cat3sec3\\11.jpg"
+    val path: String = "Resources\\lib2\\lib2cat3\\lib2cat3sec3\\01.jpg"
 
 
     Box(Modifier.padding(start = 250.dp, end = 250.dp).fillMaxSize().background(BasicColors.primaryBGColor).padding(10.dp)) {
