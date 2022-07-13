@@ -14,14 +14,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 
 @Composable
 fun DDMenu(
-    itemsList: List<String>,
+    list: List<String>,
+    indexLamb: (Int) -> Unit,
     width: Dp,
     shape: Shape,
     elevation: Dp = 8.dp,
@@ -30,7 +30,9 @@ fun DDMenu(
 ) {
 
     var expand by remember { mutableStateOf(false) }
-    var text by remember { mutableStateOf(if (itemsList.isNotEmpty()) itemsList[0] else "") }
+    var text by remember { mutableStateOf(if (list.isNotEmpty()) list[0] else "") }
+
+    if (!list.contains(text)) indexLamb(0)
 
     Box(
         Modifier
@@ -41,7 +43,11 @@ fun DDMenu(
     ) {
 
         Text(
-            text = text,
+            text = when {
+                        list.contains(text) -> text
+                        !list.contains(text) && list.isNotEmpty() -> list[0]
+                        else -> ""
+                    },
             maxLines = 1,
             style = Styles.textStyle,
             modifier = Modifier
@@ -63,19 +69,24 @@ fun DDMenu(
                 .border(1.dp, BasicColors.tertiaryBGColor, RoundedCornerShape(4.dp))
         ) {
 
-            itemsList.forEachIndexed { _index, _item ->
+            list.forEachIndexed { _index, _item ->
+
                 Box(
                     Modifier
                         .fillMaxWidth()
-                        .clickable { text = _item; expand = false }
+                        .clickable {
+                            text = _item
+                            indexLamb(_index)
+                            expand = false
+                        }
                         .padding(horizontal = 10.dp, vertical = 4.dp)
                 ) {
                     Text(_item, maxLines = 1, style = Styles.textStyle)
                 }
 
                 when {
-                    (itemsList.lastIndex == _index) && enableAddButton -> Divider(color = BasicColors.tertiaryBGColor)
-                    itemsList.lastIndex != _index -> Divider(color = BasicColors.tertiaryBGColor)
+                    (list.lastIndex == _index) && enableAddButton -> Divider(color = BasicColors.tertiaryBGColor)
+                    list.lastIndex != _index -> Divider(color = BasicColors.tertiaryBGColor)
                 }
 
             }

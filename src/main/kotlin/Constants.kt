@@ -11,6 +11,7 @@ internal class Labels {
     val sort = "Sort"
     val size = "Size"
     val add = "+"
+    val searchDDMenu = listOf<String>("All", "Library", "Category", "Section")
 
 /** EditMenu */
     val open = "Open"

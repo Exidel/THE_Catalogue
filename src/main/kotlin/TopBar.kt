@@ -3,6 +3,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,8 +22,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun TopBar() {
 
-    val list1 = listOf("lib", "sublib", "whatever")
     val list2 = listOf("date", "name", "whatever")
+    var indexPlug by remember { mutableStateOf(0) }
 
 
     Row(
@@ -30,29 +32,18 @@ fun TopBar() {
         modifier = Modifier.padding(10.dp)
     ) {
 
-        Row(verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .height(IntrinsicSize.Min)
-                .shadow(8.dp, RoundedCornerShape(4.dp))
-                .border(1.dp, BasicColors.tertiaryBGColor, RoundedCornerShape(4.dp))
-        ) {
-
-            TextField(170.dp)
-            Divider(Modifier.fillMaxHeight().width(1.dp), BasicColors.tertiaryBGColor)
-            DDMenu(list1, 120.dp, RoundedCornerShape(0.dp), Dp.Unspecified, Dp.Unspecified)
-
-        }
+        TextFieldWithMenu()
 
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             Text(Labels().sort + ":", maxLines = 1, style = Styles.textStyle)
 
-            DDMenu(list2, 150.dp, RoundedCornerShape(4.dp))
+            DDMenu(list2, {indexPlug = it}, 150.dp, RoundedCornerShape(4.dp))
         }
 
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             Text(Labels().size + ":", maxLines = 1, style = Styles.textStyle)
 
-            //TODO() draggable point
+            Icon(Icons.Default.Search, null, tint = Color.White)
         }
 
     }

@@ -15,10 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.WindowState
 
 
 @Composable
-fun DraggableArea(onClick: () -> Unit) {
+fun DraggableArea(state: WindowState, onClick: () -> Unit) {
 
     Column {
         Box(Modifier.fillMaxWidth().height(48.dp).background(BasicColors.secondaryBGColor).padding(horizontal = 10.dp)) {
