@@ -143,6 +143,7 @@ object DirManipulations {
     }
 
 
+/** GET GRID LIST */
 
     /** return list for Grid from selected folder */
     fun getMainList(libIndex: Int, categoryIndex: Int, sectionIndex: Int): List<String> {

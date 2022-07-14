@@ -42,9 +42,9 @@ fun MiddleGrid(
 
                     var check by remember { mutableStateOf(false) }
 
-                    Card(elevation = 8.dp, modifier = Modifier.size(size.dp).clickable {  }) {
+                    Card(elevation = 8.dp, modifier = Modifier.aspectRatio(1f).size(size.dp).clickable {  }) {
 
-                        Box(Modifier.wrapContentSize()) {
+                        Box(Modifier.fillMaxSize()) {
 
                             if (_item != "" && Path(_item).exists()) {
                                 Image(
