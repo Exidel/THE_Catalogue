@@ -1,5 +1,3 @@
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.window.WindowDraggableArea
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.LocalMinimumTouchTargetEnforcement
 import androidx.compose.material.MaterialTheme
@@ -11,9 +9,6 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import kotlin.io.path.Path
-import kotlin.io.path.exists
-import kotlin.io.path.name
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -23,14 +18,8 @@ fun main() = application {
 
     CompositionLocalProvider(LocalMinimumTouchTargetEnforcement provides false) {
         Window(state = state, onCloseRequest = ::exitApplication, undecorated = true) {
-
             MaterialTheme {
-
-                Column {
-                    WindowDraggableArea { DraggableArea(state) { exitApplication() } }
-                    MainView()
-                }
-
+                    MainView(state) { exitApplication() }
             }
         }
     }

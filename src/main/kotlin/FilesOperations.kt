@@ -1,7 +1,6 @@
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import org.jetbrains.skia.Image
-import org.jetbrains.skiko.loadBytesFromPath
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Files.createDirectory
