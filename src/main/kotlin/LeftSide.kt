@@ -11,11 +11,16 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun BoxScope.LeftNavigationColumn() {
+fun BoxScope.LeftNavigationColumn(
+    libIndex: Int,
+    libLamb: (Int) -> Unit,
+    categoryIndex: Int,
+    catLamb: (Int) -> Unit,
+    sectionIndex: Int,
+    secLamb: (Int) -> Unit
+) {
 
-    var libIndex by remember { mutableStateOf(0) }
-    var categoryIndex by remember { mutableStateOf(0) }
-    var sectionIndex by remember { mutableStateOf(0) }
+
 
 
     Column(
@@ -29,11 +34,11 @@ fun BoxScope.LeftNavigationColumn() {
 
         Text(Labels().firstDDLabel + ":", maxLines = 1, style = Styles.textStyle)
 
-        DDMenu(DirManipulations.getLibsList(), { libIndex = it }, 230.dp, RoundedCornerShape(4.dp))
+        DDMenu(DirManipulations.getLibsList(), { libLamb(it) }, 230.dp, RoundedCornerShape(4.dp))
 
         Text(Labels().secondDDLabel + ":", maxLines = 1, style = Styles.textStyle)
 
-        DDMenu(DirManipulations.getCategoriesList(libIndex), { categoryIndex = it }, 230.dp, RoundedCornerShape(4.dp))
+        DDMenu(DirManipulations.getCategoriesList(libIndex), { catLamb(it) }, 230.dp, RoundedCornerShape(4.dp))
 
         Column(
             Modifier
@@ -52,7 +57,7 @@ fun BoxScope.LeftNavigationColumn() {
                         style = Styles.textStyle,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { sectionIndex = _index }
+                            .clickable { secLamb(_index) }
                             .padding(10.dp, 8.dp)
                     )
 

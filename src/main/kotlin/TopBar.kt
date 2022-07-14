@@ -14,7 +14,11 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun TopBar() {
+fun TopBar(
+    indexLamb: (Int) -> Unit,
+    tfText: String,
+    tfTextLamb: (String) -> Unit
+) {
 
     var indexPlug by remember { mutableStateOf(0) }
 
@@ -25,7 +29,7 @@ fun TopBar() {
         modifier = Modifier.padding(10.dp)
     ) {
 
-        TextFieldWithMenu()
+        TextFieldWithMenu(indexLamb, tfText, tfTextLamb)
 
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             Text(Labels().sort + ":", maxLines = 1, style = Styles.textStyle)

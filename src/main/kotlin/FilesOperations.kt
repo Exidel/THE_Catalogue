@@ -12,7 +12,7 @@ object DirManipulations {
 
 /** DIRECTORIES HIERARCHY */
 
-    private const val root: String = "Resources/"
+    internal const val root: String = "Resources/"
 
 
     /** get Libraries list */
@@ -89,11 +89,12 @@ object DirManipulations {
 
         val list = mutableListOf<Path>()
         if (Files.notExists(Path(root))) createDirectory(Path(root))
-        val p: Path = if (path.name != "") path else Path(root)
+        val p: Path = if (path.pathString != "") path else Path(root)
 
         try {
             p.listDirectoryEntries().filter { it.isDirectory() }.forEach { list.add(it) }
         } catch (e: Exception) { e.printStackTrace() }
+
         return list
     }
 
@@ -102,13 +103,13 @@ object DirManipulations {
 /** SEARCH */
 
     /** get searching "everywhere" list */
-    fun scanAll(): List<String> {
+    fun scanAll(): List<Path> {
 
-        val list = mutableListOf<String>()
+        val list = mutableListOf<Path>()
 
         if (Path(root).exists()) {
             try {
-                File(root).walkTopDown().filter { !it.isDirectory }.forEach { list.add(it.path) }
+                File(root).walkTopDown().filter { !it.isDirectory }.forEach { list.add(it.toPath()) }
             } catch (e: Exception) { e.printStackTrace() }
         }
 
@@ -117,15 +118,17 @@ object DirManipulations {
 
 
     /** get searching "library" list */
-    fun scanSelected(path: String = "") {
+    fun scanSelected(path: String = ""): List<Path> {
 
-        val list = mutableListOf<String>()
+        val list = mutableListOf<Path>()
 
         if (Path(path).exists() && path != "") {
             try {
-                File(path).walkTopDown().filter { !it.isDirectory }.forEach { list.add(it.path) }
+                File(path).walkTopDown().filter { !it.isDirectory }.forEach { list.add(it.toPath()) }
             } catch (e: Exception) { e.printStackTrace() }
         }
+
+        return list
 
     }
 

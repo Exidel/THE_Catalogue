@@ -22,9 +22,13 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun TextFieldWithMenu() {
+fun TextFieldWithMenu(
+    indexLamb: (Int) -> Unit,
+    tfText: String,
+    tfTextLamb: (String) -> Unit
+) {
 
-    var tfText by remember { mutableStateOf("") }
+/** TF variables */
     var hover by remember { mutableStateOf(false) }
     val focus = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -39,7 +43,7 @@ fun TextFieldWithMenu() {
 
         BasicTextField(
             value = tfText,
-            onValueChange = { tfText = it },
+            onValueChange = { tfTextLamb(it)},
             singleLine = true,
             textStyle = Styles.textStyle,
             cursorBrush = Brush.linearGradient(listOf(Color.White, Color.White)),
@@ -54,7 +58,7 @@ fun TextFieldWithMenu() {
 
                         true
                     } else if ((it.key == Key.Escape) && (it.type == KeyEventType.KeyUp)) {
-                        tfText = ""
+                        tfTextLamb("")
                         focusManager.clearFocus()
                         true
                     } else {false}
@@ -65,7 +69,7 @@ fun TextFieldWithMenu() {
 
         Divider(Modifier.fillMaxHeight().width(1.dp), BasicColors.tertiaryBGColor)
 
-        DDMenu(Labels().searchDDMenu, {}, 120.dp, RoundedCornerShape(0.dp), Dp.Unspecified, Dp.Unspecified)
+        DDMenu(Labels().searchDDMenu, {indexLamb(it)}, 120.dp, RoundedCornerShape(0.dp), Dp.Unspecified, Dp.Unspecified)
 
     }
 
