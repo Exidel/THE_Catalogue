@@ -143,4 +143,107 @@ object DirManipulations {
     }
 
 
+
+    /** return list for Grid from selected folder */
+    fun getMainList(libIndex: Int, categoryIndex: Int, sectionIndex: Int): List<String> {
+
+        val libList = getLibsList()
+        val catList = getCategoriesList(libIndex)
+        val secList = getSectionsList(libIndex, categoryIndex)
+
+        val list = if (
+            libList.isNotEmpty() && libIndex <= libList.lastIndex
+            && catList.isNotEmpty() && categoryIndex <= catList.lastIndex
+            && secList.isNotEmpty() && sectionIndex <= secList.lastIndex
+            && scanSelected(root + libList[libIndex] + "/"
+                    + catList[categoryIndex] + "/"
+                    + secList[sectionIndex]).isNotEmpty()
+        ) {
+            scanSelected(root + libList[libIndex] + "/"
+                    + catList[categoryIndex] + "/"
+                    + secList[sectionIndex])
+                .filter {
+                    it.name.contains("preview", true) &&
+                            it.name.contains(".jpg", true)
+                }
+                .map { it.pathString }
+        } else listOf()
+
+        return list
+    }
+
+    /** return list for Grid filtered by searching request */
+    fun getSearchList(tfText: String, libIndex: Int, categoryIndex: Int, sectionIndex: Int, searchIndex: Int): List<String> {
+
+        val libList = getLibsList()
+        val catList = getCategoriesList(libIndex)
+        val secList = getSectionsList(libIndex, categoryIndex)
+
+        val list = if (tfText != "") {
+
+            when(searchIndex) {
+
+                0 -> if (scanAll().isNotEmpty()) {
+                    scanAll().filter {
+                        it.name.contains(tfText, true)
+                                && it.name.contains(".jpg", true)
+                                && it.name.contains("preview", true)
+                    }
+                        .map { it.pathString }
+                } else listOf()
+
+                1 -> if (
+                    libList.isNotEmpty() && libIndex <= libList.lastIndex
+                    && scanSelected(root + libList[libIndex]).isNotEmpty()
+                ) {
+                    scanSelected(root + libList[libIndex]).filter {
+                        it.name.contains(tfText, true)
+                                && it.name.contains(".jpg", true)
+                                && it.name.contains("preview", true)
+                    }.map { it.pathString }
+                } else listOf()
+
+                2 -> if (
+                    libList.isNotEmpty() && libIndex <= libList.lastIndex
+                    && catList.isNotEmpty() && categoryIndex <= catList.lastIndex &&
+                    scanSelected(root + libList[libIndex] + "/" + catList[categoryIndex]).isNotEmpty()
+                ) {
+                    scanSelected(root + libList[libIndex] + "/" + catList[categoryIndex])
+                        .filter { it.name.contains(tfText, true)
+                                && it.name.contains(".jpg", true)
+                                && it.name.contains("preview", true)
+                        }
+                        .map { it.pathString }
+                } else listOf()
+
+                3 -> if (
+                    libList.isNotEmpty() && libIndex <= libList.lastIndex
+                    && catList.isNotEmpty() && categoryIndex <= catList.lastIndex
+                    && secList.isNotEmpty() && sectionIndex <= secList.lastIndex
+                    && scanSelected(root + libList[libIndex] + "/"
+                            + catList[categoryIndex] + "/"
+                            + secList[sectionIndex]).isNotEmpty()
+                ) {
+                    scanSelected(root + libList[libIndex] + "/"
+                            + catList[categoryIndex] + "/"
+                            + secList[sectionIndex])
+                        .filter { it.name.contains(tfText, true)
+                                && it.name.contains(".jpg", true)
+                                && it.name.contains("preview", true)
+                        }
+                        .map { it.pathString }
+                } else listOf()
+
+                else -> listOf()
+
+            }
+
+        } else listOf()
+
+        return list
+
+    }
+
+
+
 }
