@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.window.WindowDraggableArea
 import androidx.compose.material.Divider
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
@@ -25,6 +24,8 @@ fun FrameWindowScope.MainView(state: WindowState, exitApp: () -> Unit) {
 /** LazyGrid variables */
     var size by remember { mutableStateOf(128)}
     val mainList: List<String> = DirManipulations.getMainList(libIndex, categoryIndex, sectionIndex)
+    val selectedItemList: MutableList<String> = mutableListOf()
+    var selectedItem by remember { mutableStateOf("") }
 
 
 /** Search variables */
@@ -50,9 +51,9 @@ fun FrameWindowScope.MainView(state: WindowState, exitApp: () -> Unit) {
 
                 LeftNavigationColumn( libIndex, {libIndex = it}, categoryIndex, {categoryIndex = it}, sectionIndex, {sectionIndex = it} )
 
-                MiddleGrid(searchList.ifEmpty { mainList }, size )
+                MiddleGrid( searchList.ifEmpty { mainList }, size, selectedItemList, {selectedItem = it} )
 
-                RightInfoColumn(Modifier.align(Alignment.TopEnd))
+                RightInfoColumn(selectedItem)
 
             }
 

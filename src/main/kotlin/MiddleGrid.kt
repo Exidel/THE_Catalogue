@@ -20,7 +20,9 @@ import kotlin.io.path.exists
 @Composable
 fun MiddleGrid(
     list: List<String>,
-    size: Int
+    size: Int,
+    selectedItemsList: MutableList<String>,
+    selectedItem: (String) -> Unit
 ) {
 
     val scrollState = rememberLazyListState(0)
@@ -42,7 +44,10 @@ fun MiddleGrid(
 
                     var check by remember { mutableStateOf(false) }
 
-                    Card(elevation = 8.dp, modifier = Modifier.aspectRatio(1f).size(size.dp).clickable {  }) {
+                    if (check) selectedItemsList.add(_item) else
+                        if (selectedItemsList.contains(_item)) selectedItemsList.remove(_item)
+
+                    Card(elevation = 8.dp, modifier = Modifier.aspectRatio(1f).size(size.dp).clickable { selectedItem(_item) }) {
 
                         Box(Modifier.fillMaxSize()) {
 

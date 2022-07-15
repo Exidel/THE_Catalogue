@@ -246,5 +246,17 @@ object DirManipulations {
     }
 
 
+/** INFO.txt actions */
+
+    /** get info.txt as String */
+    fun getInfo(path: String): String {
+        return if (path != "" && File(path).exists()) File(path).readText() else ""
+    }
+
+    /** create info.txt */
+    fun createInfo(txt: String, path: String) {
+        if (path != "" && File(File(path).parent).exists()) File(path).writeText(txt, Charsets.UTF_8)
+    }
+
 
 }

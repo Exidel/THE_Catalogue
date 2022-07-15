@@ -22,7 +22,7 @@ fun TopBar(
     sizeLamb: (Int) -> Unit
 ) {
 
-    var indexPlug by remember { mutableStateOf(0) }
+    var sortIndexPlug by remember { mutableStateOf(0) }
     var slider by remember { mutableStateOf(128f) }
 
 
@@ -37,7 +37,7 @@ fun TopBar(
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             Text(Labels().sort + ":", maxLines = 1, style = Styles.textStyle)
 
-            DDMenu(Labels().sortDDMenu, {indexPlug = it}, 150.dp, RoundedCornerShape(4.dp))
+            DDMenu(Labels().sortDDMenu, {sortIndexPlug = it}, 150.dp, RoundedCornerShape(4.dp))
         }
 
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
