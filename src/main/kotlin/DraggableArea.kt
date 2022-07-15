@@ -1,14 +1,10 @@
-import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.DraggableState
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsHoveredAsState
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.*
@@ -17,6 +13,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -36,7 +33,12 @@ fun DraggableArea(state: WindowState, close: () -> Unit) {
 
             Icon(Icons.Default.Menu, null, tint = Color.White, modifier = Modifier.align(Alignment.CenterStart))
 
-            Icon(Icons.Default.AccountBox, null, tint = Color.White, modifier = Modifier.align(Alignment.Center))
+            Image(
+                painter = painterResource(resourcePath = "/catalogue.png"),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(Color.White),
+                modifier = Modifier.size(34.dp).align(Alignment.Center)
+            )
 
             Row(
                 modifier = Modifier.align(Alignment.CenterEnd),
