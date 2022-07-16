@@ -4,9 +4,11 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,32 +49,40 @@ fun MiddleGrid(
                     if (check) selectedItemsList.add(_item) else
                         if (selectedItemsList.contains(_item)) selectedItemsList.remove(_item)
 
-                    Card(elevation = 8.dp, modifier = Modifier.aspectRatio(1f).size(size.dp).clickable { selectedItem(_item) }) {
+                    TooltipArea(
+                        tooltip = { Text(_item, style = Styles.textStyle, modifier = Modifier
+                            .background(BasicColors.primaryBGColor, RoundedCornerShape(4.dp))
+                            .border(1.dp, BasicColors.tertiaryBGColor, RoundedCornerShape(4.dp))
+                            .padding(10.dp, 5.dp)
+                        ) }
+                    ) {
+                        Card(elevation = 8.dp, modifier = Modifier.aspectRatio(1f).size(size.dp).clickable { selectedItem(_item) }) {
 
-                        Box(Modifier.fillMaxSize()) {
+                            Box(Modifier.fillMaxSize()) {
 
-                            if (_item != "" && Path(_item).exists()) {
-                                Image(
-                                    bitmap = DirManipulations.getImg(_item),
-                                    contentDescription = null,
-                                    alignment = Alignment.Center,
-                                    contentScale = ContentScale.FillBounds,
-                                    modifier = Modifier.fillMaxSize()
+                                if (_item != "" && Path(_item).exists()) {
+                                    Image(
+                                        bitmap = DirManipulations.getImg(_item),
+                                        contentDescription = null,
+                                        alignment = Alignment.Center,
+                                        contentScale = ContentScale.FillBounds,
+                                        modifier = Modifier.fillMaxSize()
+                                    )
+                                } else { Box(Modifier.size(size.dp).border(2.dp, BasicColors.tertiaryBGColor).background(BasicColors.secondaryBGColor)) }
+
+                                Checkbox(
+                                    checked = check,
+                                    onCheckedChange = {check = it},
+                                    modifier = Modifier.align(Alignment.TopStart),
+                                    colors = CheckboxDefaults.colors(
+                                        checkedColor = BasicColors.primaryBGColor,
+                                        uncheckedColor = BasicColors.tertiaryBGColor
+                                    )
                                 )
-                            } else { Box(Modifier.size(size.dp).border(2.dp, BasicColors.tertiaryBGColor).background(BasicColors.secondaryBGColor)) }
 
-                            Checkbox(
-                                checked = check,
-                                onCheckedChange = {check = it},
-                                modifier = Modifier.align(Alignment.TopStart),
-                                colors = CheckboxDefaults.colors(
-                                    checkedColor = BasicColors.primaryBGColor,
-                                    uncheckedColor = BasicColors.tertiaryBGColor
-                                )
-                            )
+                            }
 
                         }
-
                     }
 
                 }
