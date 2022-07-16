@@ -1,5 +1,10 @@
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toComposeImageBitmap
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.WindowPosition
+import androidx.compose.ui.window.WindowState
 import org.jetbrains.skia.Image
 import java.awt.Desktop
 import java.io.File
@@ -13,8 +18,8 @@ object DirManipulations {
 
 /** DIRECTORIES HIERARCHY */
 
+    /** root directory for materials */
     private const val root: String = "Resources/"
-
 
     /** get directories list */
     fun getDirList(path: String = ""): List<Path> {
@@ -97,7 +102,6 @@ object DirManipulations {
 
         return list
     }
-
 
     /** return list for Grid filtered by searching request */
     fun getSearchList(tfText: String, libIndex: Int, categoryIndex: Int, sectionIndex: Int, searchIndex: Int): List<String> {
@@ -199,4 +203,45 @@ object DirManipulations {
     }
 
 
+/** SETTINGS */
+
+    /** save settings.txt */
+    fun saveSettings(state: WindowState? = null, lang: String = "localization/english.txt", logo: Boolean = false) {
+
+        val settings: String = if (state != null)
+            "${state.size.width.value}" + "\n" + "${state.size.height.value}" + "\n" +
+            "${state.position.x.value}" + "\n" + "${state.position.y.value}" + "\n" + lang + "\n" + "$logo"
+        else ""
+
+        if (settings.isNotEmpty()) File("settings.txt").writeText(settings, Charsets.UTF_8)
+    }
+
+    /** load settings.txt */
+    fun loadSettings(): Settings {
+        val list = if (File("settings.txt").exists()) File("settings.txt").readLines() else listOf()
+        var obj = Settings()
+
+        try {
+            obj = if (list.isNotEmpty()) Settings(
+                winSize = DpSize(list[0].toFloat().dp, list[1].toFloat().dp),
+                winPosition = if (list[2].contains("NaN")) Settings().winPosition
+                                else WindowPosition(list[2].toFloat().dp, list[3].toFloat().dp),
+                lang = list[4],
+                logo = list[5].toBoolean()
+            ) else Settings()
+        } catch (e: Exception) { File("settingsErrorLog.txt").writeText(e.stackTraceToString()) }
+
+        return obj
+
+    }
+
 }
+
+
+
+data class Settings(
+    val winSize: DpSize = DpSize(1200.dp, 800.dp),
+    val winPosition: WindowPosition = WindowPosition(Alignment.Center),
+    val lang: String = "localization/english.txt",
+    val logo: Boolean = false
+)

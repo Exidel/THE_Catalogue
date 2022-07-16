@@ -1,7 +1,6 @@
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.HoverInteraction
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
@@ -16,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
 
 
@@ -56,7 +56,12 @@ fun BoxScope.MainMenu(
 
 
             Text(text = list[1], maxLines = 1, style = Styles.textStyle, modifier = Modifier
-                .fillMaxWidth().clickable { state.size = DpSize(1200.dp, 800.dp) }.padding(10.dp, 4.dp)
+                .fillMaxWidth()
+                .clickable {
+                    state.size = DpSize(1200.dp, 800.dp)
+                    state.position = WindowPosition(Alignment.Center)
+                }
+                .padding(10.dp, 4.dp)
             )
 
             Divider(color = BasicColors.tertiaryBGColor)

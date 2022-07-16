@@ -2,13 +2,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -29,13 +26,13 @@ import androidx.compose.ui.window.WindowState
 fun DraggableArea(state: WindowState, close: () -> Unit) {
 
     var hover by remember { mutableStateOf(false) }
-    var enableLOGOShadow by remember { mutableStateOf(false) }
+    var enableLOGOShadow by remember { mutableStateOf(DirManipulations.loadSettings().logo) }
 
 
     Column {
         Box(Modifier.fillMaxWidth().height(48.dp).background(BasicColors.secondaryBGColor)) {
 
-            MainMenu(enableLOGOShadow, {enableLOGOShadow = it}, state, close)
+            MainMenu(enableLOGOShadow, {enableLOGOShadow = it}, state, { DirManipulations.saveSettings(state, logo = enableLOGOShadow); close.invoke() })
 
 
             if (enableLOGOShadow) {
@@ -93,7 +90,7 @@ fun DraggableArea(state: WindowState, close: () -> Unit) {
                 Box(
                     Modifier.size(48.dp)
                         .background(if (hover) Color(1f, 0.4f, 0.4f, 1f) else BasicColors.secondaryBGColor)
-                        .clickable { close.invoke() }
+                        .clickable { DirManipulations.saveSettings(state, logo = enableLOGOShadow); close.invoke() }
                         .pointerMoveFilter(
                             onEnter = { hover = true; false },
                             onExit = { hover = false; false }
