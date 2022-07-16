@@ -63,7 +63,6 @@ fun DDMenu(
             expanded = expand,
             onDismissRequest = {expand = false},
             modifier = Modifier
-                .padding(vertical = 0.dp)
                 .width(width)
                 .background(BasicColors.primaryBGColor, RoundedCornerShape(4.dp))
                 .border(1.dp, BasicColors.tertiaryBGColor, RoundedCornerShape(4.dp))

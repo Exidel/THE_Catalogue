@@ -30,21 +30,12 @@ fun DraggableArea(state: WindowState, close: () -> Unit) {
 
     var hover by remember { mutableStateOf(false) }
     var enableLOGOShadow by remember { mutableStateOf(false) }
-    var openMenu by remember { mutableStateOf(false) }
-    var menuIndex by remember { mutableStateOf(0) }
 
 
     Column {
-        Box(Modifier.fillMaxWidth().height(48.dp).background(BasicColors.secondaryBGColor).padding(start = 10.dp)) {
+        Box(Modifier.fillMaxWidth().height(48.dp).background(BasicColors.secondaryBGColor)) {
 
-            Icon(
-                imageVector = Icons.Rounded.Menu,
-                contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .clickable { openMenu = !openMenu }
-            )
+            MainMenu(enableLOGOShadow, {enableLOGOShadow = it}, state, close)
 
 
             if (enableLOGOShadow) {

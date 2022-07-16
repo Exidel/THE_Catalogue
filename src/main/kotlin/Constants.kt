@@ -12,14 +12,16 @@ internal class Labels {
     val size = "Size"
     val searchDDMenu = listOf<String>("All", "Library", "Category", "Section")
     val sortDDMenu = listOf<String>("None", "Name", "Date")
-    val menuList = listOf<String>("Enable LOGO shadow", "Exit")
+    val menuList = listOf<String>("LOGO shadow", "Reset window size", "Language", "Exit")
 
 /** EditMenu */
     val open = "Open"
     val delete = "Delete"
 
 
-    fun loadLanguage(): List<String> {return listOf<String>()}
+    fun loadLanguage(): List<String> {
+        return listOf<String>()
+    }
 
 }
 
