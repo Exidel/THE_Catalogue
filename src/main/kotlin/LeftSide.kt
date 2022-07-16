@@ -1,6 +1,4 @@
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
@@ -8,9 +6,14 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.isPrimaryPressed
+import androidx.compose.ui.input.pointer.isSecondaryPressed
 import androidx.compose.ui.unit.dp
+import kotlin.io.path.name
+import kotlin.io.path.pathString
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BoxScope.LeftNavigationColumn(
     libIndex: Int,
@@ -21,7 +24,11 @@ fun BoxScope.LeftNavigationColumn(
     secLamb: (Int) -> Unit
 ) {
 
-
+    var editMenu by remember { mutableStateOf(false) }
+    val dm = DirManipulations
+    val libList = dm.getDirList()
+    val catList = if (libIndex <= libList.lastIndex) dm.getDirList(libList[libIndex].pathString) else listOf()
+    val secList = if (libIndex <= libList.lastIndex && categoryIndex <= catList.lastIndex) dm.getDirList(catList[categoryIndex].pathString) else listOf()
 
 
     Column(
@@ -35,11 +42,11 @@ fun BoxScope.LeftNavigationColumn(
 
         Text(Labels().firstDDLabel + ":", maxLines = 1, style = Styles.textStyle)
 
-        DDMenu(DirManipulations.getLibsList(), { libLamb(it) }, 230.dp, RoundedCornerShape(4.dp))
+        DDMenu(dm.getDirList().map { it.name }, { libLamb(it) }, 230.dp, RoundedCornerShape(4.dp))
 
         Text(Labels().secondDDLabel + ":", maxLines = 1, style = Styles.textStyle)
 
-        DDMenu(DirManipulations.getCategoriesList(libIndex), { catLamb(it) }, 230.dp, RoundedCornerShape(4.dp))
+        DDMenu(catList.map { it.name }, { catLamb(it) }, 230.dp, RoundedCornerShape(4.dp))
 
         Column(
             Modifier
@@ -48,9 +55,9 @@ fun BoxScope.LeftNavigationColumn(
                 .border( 2.dp, BasicColors.tertiaryBGColor, RoundedCornerShape(4.dp) )
         ) {
 
-            if (DirManipulations.getSectionsList(libIndex, categoryIndex).isNotEmpty()) {
+            if (secList.isNotEmpty()) {
 
-                DirManipulations.getSectionsList(libIndex, categoryIndex).forEachIndexed { _index, _item ->
+                secList.map { it.name }.forEachIndexed { _index, _item ->
 
                     Text(
                         text = _item,
@@ -58,7 +65,13 @@ fun BoxScope.LeftNavigationColumn(
                         style = Styles.textStyle,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { secLamb(_index) }
+                            .mouseClickable {
+                                if (this.buttons.isPrimaryPressed) secLamb(_index)
+                                else if (this.buttons.isSecondaryPressed) {
+                                    secLamb(_index)
+                                    editMenu = true
+                                }
+                            }
                             .padding(10.dp, 8.dp)
                     )
 
@@ -67,6 +80,13 @@ fun BoxScope.LeftNavigationColumn(
                 }
 
             }
+
+            if (editMenu) EditMenu(
+                            editMenu,
+                            {editMenu = it},
+                            {dm.openDir(secList[sectionIndex].pathString)},
+                            {dm.removeDir(secList[sectionIndex].pathString)}
+                        )
 
         }
 

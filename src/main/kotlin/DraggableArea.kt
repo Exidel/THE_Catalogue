@@ -2,15 +2,18 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -26,19 +29,41 @@ import androidx.compose.ui.window.WindowState
 fun DraggableArea(state: WindowState, close: () -> Unit) {
 
     var hover by remember { mutableStateOf(false) }
+    var enableLOGOShadow by remember { mutableStateOf(false) }
+    var openMenu by remember { mutableStateOf(false) }
+    var menuIndex by remember { mutableStateOf(0) }
 
 
     Column {
         Box(Modifier.fillMaxWidth().height(48.dp).background(BasicColors.secondaryBGColor).padding(start = 10.dp)) {
 
-            Icon(Icons.Default.Menu, null, tint = Color.White, modifier = Modifier.align(Alignment.CenterStart))
+            Icon(
+                imageVector = Icons.Rounded.Menu,
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .clickable { openMenu = !openMenu }
+            )
+
+
+            if (enableLOGOShadow) {
+                Image(
+                    painter = painterResource(resourcePath = "/catalogue.png"),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(Color.DarkGray),
+                    modifier = Modifier.padding(end = 8.dp, top = 8.dp).blur(0.1.dp).size(34.dp).align(Alignment.Center)
+                ) // shadow for LOGO
+            }
+
 
             Image(
                 painter = painterResource(resourcePath = "/catalogue.png"),
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(Color.White),
                 modifier = Modifier.size(34.dp).align(Alignment.Center)
-            )
+            ) // LOGO
+
 
             Row(
                 modifier = Modifier.align(Alignment.CenterEnd),
@@ -97,5 +122,7 @@ fun DraggableArea(state: WindowState, close: () -> Unit) {
 
         Divider(Modifier.shadow(8.dp), BasicColors.tertiaryBGColor, 1.dp)
     }
+
+
 
 }

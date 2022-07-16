@@ -31,6 +31,9 @@ compose.desktop {
             targetFormats(TargetFormat.Exe)
             packageName = "THE_Catalogue"
             packageVersion = "1.0.0"
+            windows {
+                    iconFile.set(project.file("src\\main\\resources\\catalogue.ico"))
+            }
         }
     }
 }

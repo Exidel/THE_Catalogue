@@ -1,6 +1,7 @@
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import org.jetbrains.skia.Image
+import java.awt.Desktop
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Files.createDirectory
@@ -12,84 +13,15 @@ object DirManipulations {
 
 /** DIRECTORIES HIERARCHY */
 
-    internal const val root: String = "Resources/"
+    private const val root: String = "Resources/"
 
 
-    /** get Libraries list */
-    fun getLibsList(): List<String> {
-
-        val list = mutableListOf<String>()
-
-        if (Files.notExists(Path(root))) createDirectory(Path(root))
-
-        try {
-
-            Path(root).listDirectoryEntries().filter { it.isDirectory() }.forEach { list.add(it.name) }
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        return list
-    }
-
-
-    /** get Categories list */
-    fun getCategoriesList(index: Int): List<String> {
-
-        val list = mutableListOf<String>()
-
-        if (getLibsList().isNotEmpty()) {
-
-            try {
-
-                Path(root + getLibsList()[index]).listDirectoryEntries().filter { it.isDirectory() }
-                    .forEach { list.add(it.name) }
-
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-
-        }
-
-        return list
-
-    }
-
-
-    /** get Sections list */
-    fun getSectionsList(lib: Int, cat: Int): List<String> {
-
-        val list = mutableListOf<String>()
-
-        if (getLibsList().isNotEmpty() && getCategoriesList(lib).isNotEmpty() && cat <= getCategoriesList(lib).lastIndex) {
-
-            if (Files.exists(Path(root + getLibsList()[lib] + "/" + getCategoriesList(lib)[cat]))) {
-
-                try {
-
-                    Path(root + getLibsList()[lib] + "/" + getCategoriesList(lib)[cat]).listDirectoryEntries()
-                        .filter { it.isDirectory() }.forEach { list.add(it.name) }
-
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-
-            }
-
-        }
-
-        return list
-
-    }
-
-
-    /** BETA!!! Universal get dir list */
-    fun getDirList(path: Path = Path("")): List<Path> {
+    /** get directories list */
+    fun getDirList(path: String = ""): List<Path> {
 
         val list = mutableListOf<Path>()
         if (Files.notExists(Path(root))) createDirectory(Path(root))
-        val p: Path = if (path.pathString != "") path else Path(root)
+        val p: Path = if (path != "") Path(path) else Path(root)
 
         try {
             p.listDirectoryEntries().filter { it.isDirectory() }.forEach { list.add(it) }
@@ -97,7 +29,6 @@ object DirManipulations {
 
         return list
     }
-
 
 
 /** SEARCH */
@@ -116,7 +47,6 @@ object DirManipulations {
         return list
     }
 
-
     /** get searching "library" list */
     fun scanSelected(path: String = ""): List<Path> {
 
@@ -133,7 +63,6 @@ object DirManipulations {
     }
 
 
-
 /** GET IMG */
 
     /** get ImageBitmap from path */
@@ -148,21 +77,17 @@ object DirManipulations {
     /** return list for Grid from selected folder */
     fun getMainList(libIndex: Int, categoryIndex: Int, sectionIndex: Int): List<String> {
 
-        val libList = getLibsList()
-        val catList = getCategoriesList(libIndex)
-        val secList = getSectionsList(libIndex, categoryIndex)
+        val libList = getDirList()
+        val catList = if (libIndex <= libList.lastIndex) getDirList(libList[libIndex].pathString) else listOf()
+        val secList = if (libIndex <= libList.lastIndex && categoryIndex <= catList.lastIndex) getDirList(catList[categoryIndex].pathString) else listOf()
 
         val list = if (
             libList.isNotEmpty() && libIndex <= libList.lastIndex
             && catList.isNotEmpty() && categoryIndex <= catList.lastIndex
             && secList.isNotEmpty() && sectionIndex <= secList.lastIndex
-            && scanSelected(root + libList[libIndex] + "/"
-                    + catList[categoryIndex] + "/"
-                    + secList[sectionIndex]).isNotEmpty()
+            && scanSelected(secList[sectionIndex].pathString).isNotEmpty()
         ) {
-            scanSelected(root + libList[libIndex] + "/"
-                    + catList[categoryIndex] + "/"
-                    + secList[sectionIndex])
+            scanSelected(secList[sectionIndex].pathString)
                 .filter {
                     it.name.contains("preview", true) &&
                             it.name.contains(".jpg", true)
@@ -173,12 +98,13 @@ object DirManipulations {
         return list
     }
 
+
     /** return list for Grid filtered by searching request */
     fun getSearchList(tfText: String, libIndex: Int, categoryIndex: Int, sectionIndex: Int, searchIndex: Int): List<String> {
 
-        val libList = getLibsList()
-        val catList = getCategoriesList(libIndex)
-        val secList = getSectionsList(libIndex, categoryIndex)
+        val libList = getDirList()
+        val catList = if (libIndex <= libList.lastIndex) getDirList(libList[libIndex].pathString) else listOf()
+        val secList = if (libIndex <= libList.lastIndex && categoryIndex <= catList.lastIndex) getDirList(catList[categoryIndex].pathString) else listOf()
 
         val list = if (tfText != "") {
 
@@ -194,10 +120,10 @@ object DirManipulations {
                 } else listOf()
 
                 1 -> if (
-                    libList.isNotEmpty() && libIndex <= libList.lastIndex
-                    && scanSelected(root + libList[libIndex]).isNotEmpty()
+                    libList.isNotEmpty() && libIndex <= libList.lastIndex &&
+                    scanSelected(libList[libIndex].pathString).isNotEmpty()
                 ) {
-                    scanSelected(root + libList[libIndex]).filter {
+                    scanSelected(libList[libIndex].pathString).filter {
                         it.name.contains(tfText, true)
                                 && it.name.contains(".jpg", true)
                                 && it.name.contains("preview", true)
@@ -206,10 +132,10 @@ object DirManipulations {
 
                 2 -> if (
                     libList.isNotEmpty() && libIndex <= libList.lastIndex
-                    && catList.isNotEmpty() && categoryIndex <= catList.lastIndex &&
-                    scanSelected(root + libList[libIndex] + "/" + catList[categoryIndex]).isNotEmpty()
+                    && catList.isNotEmpty() && categoryIndex <= catList.lastIndex
+                    && scanSelected(catList[categoryIndex].pathString).isNotEmpty()
                 ) {
-                    scanSelected(root + libList[libIndex] + "/" + catList[categoryIndex])
+                    scanSelected(catList[categoryIndex].pathString)
                         .filter { it.name.contains(tfText, true)
                                 && it.name.contains(".jpg", true)
                                 && it.name.contains("preview", true)
@@ -221,13 +147,9 @@ object DirManipulations {
                     libList.isNotEmpty() && libIndex <= libList.lastIndex
                     && catList.isNotEmpty() && categoryIndex <= catList.lastIndex
                     && secList.isNotEmpty() && sectionIndex <= secList.lastIndex
-                    && scanSelected(root + libList[libIndex] + "/"
-                            + catList[categoryIndex] + "/"
-                            + secList[sectionIndex]).isNotEmpty()
+                    && scanSelected(secList[sectionIndex].pathString).isNotEmpty()
                 ) {
-                    scanSelected(root + libList[libIndex] + "/"
-                            + catList[categoryIndex] + "/"
-                            + secList[sectionIndex])
+                    scanSelected(secList[sectionIndex].pathString)
                         .filter { it.name.contains(tfText, true)
                                 && it.name.contains(".jpg", true)
                                 && it.name.contains("preview", true)
@@ -256,6 +178,24 @@ object DirManipulations {
     /** create info.txt */
     fun createInfo(txt: String, path: String) {
         if (path != "" && File(File(path).parent).exists()) File(path).writeText(txt, Charsets.UTF_8)
+    }
+
+
+/** OPEN DIRECTORY FROM PROVIDED PATH */
+
+    /** open directory */
+    fun openDir(path: String) {
+        if (path != "" && File(path).exists()) {
+            val uri = File(path).toURI()
+            Desktop.getDesktop().browse(uri)
+        }
+    }
+
+    /** remove directory or file */
+    fun removeDir(path: String) {
+        if (path != "" && File(path).exists()) {
+            File(path).deleteRecursively()
+        }
     }
 
 

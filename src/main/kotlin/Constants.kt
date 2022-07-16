@@ -10,13 +10,12 @@ internal class Labels {
     val secondDDLabel = "Category"
     val sort = "Sort"
     val size = "Size"
-    val add = "+"
     val searchDDMenu = listOf<String>("All", "Library", "Category", "Section")
     val sortDDMenu = listOf<String>("None", "Name", "Date")
+    val menuList = listOf<String>("Enable LOGO shadow", "Exit")
 
 /** EditMenu */
     val open = "Open"
-    val edit = "Edit"
     val delete = "Delete"
 
 

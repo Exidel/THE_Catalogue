@@ -1,6 +1,4 @@
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -8,16 +6,17 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.Done
-import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.*
+import androidx.compose.ui.input.pointer.isPrimaryPressed
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -46,6 +45,14 @@ fun BoxScope.RightInfoColumn(selectedItem: String) {
 
         Row(Modifier.align(Alignment.End), Arrangement.spacedBy(10.dp)) {
 
+            Icon(
+                painter = painterResource("folder.png"),
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier.size(24.dp).clickable { DirManipulations.openDir(path) }
+            )
+
+
             if (edit) Icon(
                 imageVector = Icons.Rounded.Done,
                 contentDescription = null,
@@ -57,6 +64,7 @@ fun BoxScope.RightInfoColumn(selectedItem: String) {
                     edit = false
                 }
             )
+
 
             Icon(
                 imageVector = if (edit) Icons.Rounded.Close else Icons.Rounded.Edit,

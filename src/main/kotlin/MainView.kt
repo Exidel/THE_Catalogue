@@ -43,7 +43,7 @@ fun FrameWindowScope.MainView(state: WindowState, exitApp: () -> Unit) {
 
             WindowDraggableArea { DraggableArea(state) { exitApp.invoke() } }
 
-            TopBar({searchIndex = it}, tfText, {tfText = it}, {size = it}) //add size and dragPoint
+            TopBar({searchIndex = it}, tfText, {tfText = it}, {size = it})
 
             Divider(color = BasicColors.tertiaryBGColor, modifier = Modifier.shadow(8.dp))
 

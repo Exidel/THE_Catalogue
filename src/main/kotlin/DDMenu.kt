@@ -98,7 +98,7 @@ fun DDMenu(
                         .clickable {  }
                         .padding(horizontal = 10.dp, vertical = 4.dp)
                 ) {
-                    Text(Labels().add, Modifier.align(Alignment.Center), maxLines = 1, style = Styles.textStyle)
+                    Text("+", Modifier.align(Alignment.Center), maxLines = 1, style = Styles.textStyle)
                 }
             }
 

@@ -30,8 +30,8 @@ import java.awt.event.KeyEvent
 fun EditMenu(
     switch: Boolean,
     switchLamb: (Boolean) -> Unit,
-    dialogEditItemLamb: (Boolean) -> Unit,
-    delLamb: () -> Unit
+    open: () -> Unit,
+    delete: () -> Unit
 ) {
 
     val transition = updateTransition(switch, "DropDownMenu")
@@ -110,7 +110,7 @@ fun EditMenu(
             ) {
                 Column( Modifier
                     .width(IntrinsicSize.Max)
-                    .background(BasicColors.primaryBGColor, RoundedCornerShape(4.dp))
+                    .background(BasicColors.secondaryBGColor, RoundedCornerShape(4.dp))
                     .border(1.dp, BasicColors.tertiaryBGColor, RoundedCornerShape(4.dp))
                 ) {
 
@@ -120,23 +120,12 @@ fun EditMenu(
                         style = Styles.textStyle.copy(textAlign = TextAlign.Center),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { switchLamb(false) }
+                            .clickable { switchLamb(false); open.invoke() }
                             .padding(8.dp, 6.dp)
                     )
 
                     Divider(color = BasicColors.tertiaryBGColor)
 
-                    Text(
-                        text = Labels().edit,
-                        maxLines = 1,
-                        style = Styles.textStyle.copy(textAlign = TextAlign.Center),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable( onClick = { switchLamb(false); dialogEditItemLamb(true) })
-                            .padding(8.dp, 6.dp)
-                    )
-
-                    Divider(color = BasicColors.tertiaryBGColor)
 
                     Text(
                         text = Labels().delete,
@@ -144,19 +133,7 @@ fun EditMenu(
                         style = Styles.textStyle.copy(textAlign = TextAlign.Center),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable( onClick = { switchLamb(false); delLamb.invoke() })
-                            .padding(8.dp, 6.dp)
-                    )
-
-                    Divider(color = BasicColors.tertiaryBGColor)
-
-                    Text(
-                        text = Labels().add,
-                        maxLines = 1,
-                        style = Styles.textStyle.copy(textAlign = TextAlign.Center),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable( onClick = { switchLamb(false) })
+                            .clickable( onClick = { switchLamb(false); delete.invoke() })
                             .padding(8.dp, 6.dp)
                     )
 
