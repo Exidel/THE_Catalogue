@@ -16,6 +16,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import kotlin.io.path.Path
 import kotlin.io.path.exists
+import kotlin.io.path.pathString
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -42,7 +43,7 @@ fun MiddleGrid(
 
             if (list.isNotEmpty()) {
 
-                itemsIndexed(list) { _index, _item ->
+                itemsIndexed(list) { _, _item ->
 
                     var check by remember { mutableStateOf(false) }
 
@@ -56,7 +57,20 @@ fun MiddleGrid(
                             .padding(10.dp, 5.dp)
                         ) }
                     ) {
-                        Card(elevation = 8.dp, modifier = Modifier.aspectRatio(1f).size(size.dp).clickable { selectedItem(_item) }) {
+                        Card(elevation = 8.dp,
+                            modifier = Modifier
+                                .aspectRatio(1f)
+                                .size(size.dp)
+                                .combinedClickable(
+                                    onClick = { selectedItem(_item) },
+                                    onDoubleClick = {
+                                        selectedItem(_item)
+                                        DirManipulations.openDir(
+                                            Path(_item).parent.pathString
+                                        )
+                                    }
+                                )
+                        ) {
 
                             Box(Modifier.fillMaxSize()) {
 
