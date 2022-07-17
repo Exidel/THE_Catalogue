@@ -21,7 +21,8 @@ fun BoxScope.LeftNavigationColumn(
     categoryIndex: Int,
     catLamb: (Int) -> Unit,
     sectionIndex: Int,
-    secLamb: (Int) -> Unit
+    secLamb: (Int) -> Unit,
+    langIndex: Int
 ) {
 
     var editMenu by remember { mutableStateOf(false) }
@@ -29,6 +30,7 @@ fun BoxScope.LeftNavigationColumn(
     val libList = dm.getDirList()
     val catList = if (libIndex <= libList.lastIndex) dm.getDirList(libList[libIndex].pathString) else listOf()
     val secList = if (libIndex <= libList.lastIndex && categoryIndex <= catList.lastIndex) dm.getDirList(catList[categoryIndex].pathString) else listOf()
+    val labels = if (langIndex > 0) dm.loadLanguage(langIndex) else Labels()
 
 
     Column(
@@ -40,11 +42,11 @@ fun BoxScope.LeftNavigationColumn(
             .padding(10.dp)
     ) {
 
-        Text(Labels().firstDDLabel + ":", maxLines = 1, style = Styles.textStyle)
+        Text(labels.firstDDLabel + ":", maxLines = 1, style = Styles.textStyle)
 
         DDMenu(dm.getDirList().map { it.name }, { libLamb(it) }, 230.dp, RoundedCornerShape(4.dp))
 
-        Text(Labels().secondDDLabel + ":", maxLines = 1, style = Styles.textStyle)
+        Text(labels.secondDDLabel + ":", maxLines = 1, style = Styles.textStyle)
 
         DDMenu(catList.map { it.name }, { catLamb(it) }, 230.dp, RoundedCornerShape(4.dp))
 

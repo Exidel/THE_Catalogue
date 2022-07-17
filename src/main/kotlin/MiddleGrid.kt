@@ -23,7 +23,7 @@ import kotlin.io.path.pathString
 @Composable
 fun MiddleGrid(
     list: List<String>,
-    size: Int,
+    size: Float,
     selectedItemsList: MutableList<String>,
     selectedItem: (String) -> Unit
 ) {

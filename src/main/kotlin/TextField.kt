@@ -25,13 +25,15 @@ import androidx.compose.ui.unit.dp
 fun TextFieldWithMenu(
     indexLamb: (Int) -> Unit,
     tfText: String,
-    tfTextLamb: (String) -> Unit
+    tfTextLamb: (String) -> Unit,
+    langIndex: Int
 ) {
 
 /** TF variables */
     var hover by remember { mutableStateOf(false) }
     val focus = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
+    val labels = if (langIndex > 0) DirManipulations.loadLanguage(langIndex).searchDDMenu else Labels().searchDDMenu
 
 
     Row(verticalAlignment = Alignment.CenterVertically,
@@ -69,7 +71,7 @@ fun TextFieldWithMenu(
 
         Divider(Modifier.fillMaxHeight().width(1.dp), BasicColors.tertiaryBGColor)
 
-        DDMenu(Labels().searchDDMenu, {indexLamb(it)}, 120.dp, RoundedCornerShape(0.dp), Dp.Unspecified, Dp.Unspecified)
+        DDMenu(labels, {indexLamb(it)}, 120.dp, RoundedCornerShape(0.dp), Dp.Unspecified, Dp.Unspecified)
 
     }
 

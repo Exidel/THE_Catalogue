@@ -3,27 +3,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.text.TextStyle
 
-internal class Labels {
-
-/** DDMenu */
-    val firstDDLabel = "Library"
-    val secondDDLabel = "Category"
-    val sort = "Sort"
-    val size = "Size"
-    val searchDDMenu = listOf<String>("All", "Library", "Category", "Section")
-    val sortDDMenu = listOf<String>("None", "Name", "Date")
-    val menuList = listOf<String>("LOGO shadow", "Reset window size", "Language", "Exit")
-
-/** EditMenu */
-    val open = "Open"
-    val delete = "Delete"
 
 
-    fun loadLanguage(): List<String> {
-        return listOf<String>()
-    }
+class Labels(
+    /** DDMenu */
+    val firstDDLabel: String = "Library",
+    val secondDDLabel: String = "Category",
+    val sort: String = "Sort",
+    val size: String = "Size",
+    val searchDDMenu: List<String> = listOf("All", "Library", "Category", "Section"),
+    val sortDDMenu: List<String> = listOf("None", "Name", "Date"),
+    val menuList: List<String> = listOf("LOGO shadow", "Reset window size", "Language", "Exit"),
 
-}
+    /** EditMenu */
+    val open: String = "Open",
+    val delete: String = "Delete"
+)
 
 
 object BasicColors {

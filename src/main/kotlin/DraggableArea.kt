@@ -23,7 +23,13 @@ import androidx.compose.ui.window.WindowState
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun DraggableArea(state: WindowState, close: () -> Unit) {
+fun DraggableArea(
+    state: WindowState,
+    close: () -> Unit,
+    langIndex: Int,
+    langLamb: (Int) -> Unit,
+    itemSize: Float
+) {
 
     var hover by remember { mutableStateOf(false) }
     var enableLOGOShadow by remember { mutableStateOf(DirManipulations.loadSettings().logo) }
@@ -32,7 +38,17 @@ fun DraggableArea(state: WindowState, close: () -> Unit) {
     Column {
         Box(Modifier.fillMaxWidth().height(48.dp).background(BasicColors.secondaryBGColor)) {
 
-            MainMenu(enableLOGOShadow, {enableLOGOShadow = it}, state, { DirManipulations.saveSettings(state, logo = enableLOGOShadow); close.invoke() })
+            MainMenu(
+                enable = enableLOGOShadow,
+                enableLamb = {enableLOGOShadow = it},
+                state = state,
+                langIndex = langIndex,
+                langLamb = langLamb,
+                exit = {
+                    DirManipulations.saveSettings(state, langIndex, enableLOGOShadow, itemSize)
+                    close.invoke()
+                }
+            )
 
 
             if (enableLOGOShadow) {
@@ -90,7 +106,10 @@ fun DraggableArea(state: WindowState, close: () -> Unit) {
                 Box(
                     Modifier.size(48.dp)
                         .background(if (hover) Color(1f, 0.4f, 0.4f, 1f) else BasicColors.secondaryBGColor)
-                        .clickable { DirManipulations.saveSettings(state, logo = enableLOGOShadow); close.invoke() }
+                        .clickable {
+                            DirManipulations.saveSettings(state, langIndex, enableLOGOShadow, itemSize)
+                            close.invoke()
+                        }
                         .pointerMoveFilter(
                             onEnter = { hover = true; false },
                             onExit = { hover = false; false }

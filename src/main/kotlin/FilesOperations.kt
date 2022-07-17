@@ -206,11 +206,12 @@ object DirManipulations {
 /** SETTINGS */
 
     /** save settings.txt */
-    fun saveSettings(state: WindowState? = null, lang: String = "localization/english.txt", logo: Boolean = false) {
+    fun saveSettings(state: WindowState? = null, lang: Int = 0, logo: Boolean = false, size: Float = 128f) {
 
         val settings: String = if (state != null)
             "${state.size.width.value}" + "\n" + "${state.size.height.value}" + "\n" +
-            "${state.position.x.value}" + "\n" + "${state.position.y.value}" + "\n" + lang + "\n" + "$logo"
+            "${state.position.x.value}" + "\n" + "${state.position.y.value}" + "\n" +
+            "$lang" + "\n" + "$logo" + "\n" + "$size"
         else ""
 
         if (settings.isNotEmpty()) File("settings.txt").writeText(settings, Charsets.UTF_8)
@@ -226,14 +227,91 @@ object DirManipulations {
                 winSize = DpSize(list[0].toFloat().dp, list[1].toFloat().dp),
                 winPosition = if (list[2].contains("NaN")) Settings().winPosition
                                 else WindowPosition(list[2].toFloat().dp, list[3].toFloat().dp),
-                lang = list[4],
-                logo = list[5].toBoolean()
+                lang = list[4].toInt(),
+                logo = list[5].toBoolean(),
+                itemSize = list[6].toFloat()
             ) else Settings()
         } catch (e: Exception) { File("settingsErrorLog.txt").writeText(e.stackTraceToString()) }
 
         return obj
 
     }
+
+
+/** LOCALIZATION */
+
+    /** create "localization" folder and eng.txt file if not exist */
+    fun createLangFolder() {
+
+        if (Path("localization/").notExists()) {
+
+            createDirectory(Path("localization/"))
+
+            File("localization/eng.txt").writeText(
+                Labels().firstDDLabel + "\n" +
+                        Labels().secondDDLabel + "\n" +
+                        Labels().sort + "\n" +
+                        Labels().size + "\n" +
+                        Labels().searchDDMenu + "\n" +
+                        Labels().sortDDMenu + "\n" +
+                        Labels().menuList + "\n" +
+                        Labels().open + "\n" +
+                        Labels().delete + "\n"
+            )
+
+        } else {
+
+            if (Path("localization/eng.txt").notExists())
+
+                File("localization/eng.txt").writeText(
+                    Labels().firstDDLabel + "\n" +
+                            Labels().secondDDLabel + "\n" +
+                            Labels().sort + "\n" +
+                            Labels().size + "\n" +
+                            Labels().searchDDMenu + "\n" +
+                            Labels().sortDDMenu + "\n" +
+                            Labels().menuList + "\n" +
+                            Labels().open + "\n" +
+                            Labels().delete + "\n"
+                )
+        }
+
+    }
+
+    /** get list of lang.txt files */
+    fun getLangList(): List<Path> {
+        createLangFolder()
+        return if (Path("localization/").exists()) scanSelected("localization/") else listOf()
+    }
+
+    /** load language to use for program labels */
+    fun loadLanguage(index: Int): Labels {
+        val lang = if (getLangList().isNotEmpty() && index <= getLangList().lastIndex)
+                                        File(getLangList()[index].pathString).readLines() else listOf()
+        var obj = Labels()
+
+        try {
+            obj = if (lang.isNotEmpty()) {
+                Labels(
+                    firstDDLabel = lang[0],
+                    secondDDLabel = lang[1],
+                    sort = lang[2],
+                    size = lang[3],
+                    searchDDMenu = lang[4].removeSurrounding("[", "]").split(", "),
+                    sortDDMenu = lang[5].removeSurrounding("[", "]").split(", "),
+                    menuList = lang[6].removeSurrounding("[", "]").split(", "),
+                    open = lang[7],
+                    delete = lang[8]
+                )
+            } else Labels()
+        } catch (e: Exception) { e.printStackTrace() }
+
+        return obj
+
+    }
+
+
+
 
 }
 
@@ -242,6 +320,7 @@ object DirManipulations {
 data class Settings(
     val winSize: DpSize = DpSize(1200.dp, 800.dp),
     val winPosition: WindowPosition = WindowPosition(Alignment.Center),
-    val lang: String = "localization/english.txt",
-    val logo: Boolean = false
+    val lang: Int = 0,
+    val logo: Boolean = false,
+    val itemSize: Float = 128f
 )

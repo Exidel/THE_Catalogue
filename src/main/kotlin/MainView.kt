@@ -22,7 +22,7 @@ fun FrameWindowScope.MainView(state: WindowState, exitApp: () -> Unit) {
 
 
 /** LazyGrid variables */
-    var size by remember { mutableStateOf(128)}
+    var itemSize by remember { mutableStateOf(DirManipulations.loadSettings().itemSize)}
     val mainList: List<String> = DirManipulations.getMainList(libIndex, categoryIndex, sectionIndex)
     val selectedItemList: MutableList<String> = mutableListOf()
     var selectedItem by remember { mutableStateOf("") }
@@ -34,6 +34,9 @@ fun FrameWindowScope.MainView(state: WindowState, exitApp: () -> Unit) {
     val searchList: List<String> = DirManipulations.getSearchList(tfText, libIndex, categoryIndex, sectionIndex, searchIndex)
 
 
+/** Localization variables */
+    var langIndex by remember { mutableStateOf(0) }
+
 
 
 /** UI */
@@ -41,17 +44,17 @@ fun FrameWindowScope.MainView(state: WindowState, exitApp: () -> Unit) {
 
         Column {
 
-            WindowDraggableArea { DraggableArea(state) { exitApp.invoke() } }
+            WindowDraggableArea { DraggableArea(state, { exitApp.invoke() }, langIndex, {langIndex = it}, itemSize) }
 
-            TopBar({searchIndex = it}, tfText, {tfText = it}, {size = it})
+            TopBar({searchIndex = it}, tfText, {tfText = it}, itemSize, {itemSize = it}, langIndex)
 
             Divider(color = BasicColors.tertiaryBGColor, modifier = Modifier.shadow(8.dp))
 
             Box(Modifier.fillMaxSize()) {
 
-                LeftNavigationColumn( libIndex, {libIndex = it}, categoryIndex, {categoryIndex = it}, sectionIndex, {sectionIndex = it} )
+                LeftNavigationColumn( libIndex, {libIndex = it}, categoryIndex, {categoryIndex = it}, sectionIndex, {sectionIndex = it}, langIndex )
 
-                MiddleGrid( searchList.ifEmpty { mainList }, size, selectedItemList, {selectedItem = it} )
+                MiddleGrid( searchList.ifEmpty { mainList }, itemSize, selectedItemList, {selectedItem = it} )
 
                 RightInfoColumn(selectedItem)
 
