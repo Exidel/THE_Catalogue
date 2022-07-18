@@ -22,15 +22,15 @@ fun BoxScope.LeftNavigationColumn(
     catLamb: (Int) -> Unit,
     sectionIndex: Int,
     secLamb: (Int) -> Unit,
-    langIndex: Int
+    labels: Labels
 ) {
 
     var editMenu by remember { mutableStateOf(false) }
+    var deleteDialog by remember { mutableStateOf(false) }
     val dm = DirManipulations
     val libList = dm.getDirList()
     val catList = if (libIndex <= libList.lastIndex) dm.getDirList(libList[libIndex].pathString) else listOf()
     val secList = if (libIndex <= libList.lastIndex && categoryIndex <= catList.lastIndex) dm.getDirList(catList[categoryIndex].pathString) else listOf()
-    val labels = if (langIndex > 0) dm.loadLanguage(langIndex) else Labels()
 
 
     Column(
@@ -87,11 +87,17 @@ fun BoxScope.LeftNavigationColumn(
                             editMenu,
                             {editMenu = it},
                             {dm.openDir(secList[sectionIndex].pathString)},
-                            {dm.removeDir(secList[sectionIndex].pathString)}
+                            {deleteDialog = true}
                         )
 
         }
 
     }
+
+    if (deleteDialog) DeleteDialog(
+        isOpenLamb = {deleteDialog = it},
+        labels = labels,
+        message = secList[sectionIndex].pathString,
+        delete = {dm.removeDir(secList[sectionIndex].pathString)} )
 
 }

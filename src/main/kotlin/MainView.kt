@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.window.WindowDraggableArea
 import androidx.compose.material.Divider
 import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
@@ -24,8 +25,8 @@ fun FrameWindowScope.MainView(state: WindowState, exitApp: () -> Unit) {
 /** LazyGrid variables */
     var itemSize by remember { mutableStateOf(DirManipulations.loadSettings().itemSize)}
     val mainList: List<String> = DirManipulations.getMainList(libIndex, categoryIndex, sectionIndex)
-    val selectedItemList: MutableList<String> = mutableListOf()
     var selectedItem by remember { mutableStateOf("") }
+    val selectedItemsList: SnapshotStateList<String> = remember { mutableStateListOf() }
 
 
 /** Search variables */
@@ -36,6 +37,7 @@ fun FrameWindowScope.MainView(state: WindowState, exitApp: () -> Unit) {
 
 /** Localization variables */
     var langIndex by remember { mutableStateOf(0) }
+    val labels = if (langIndex > 0) DirManipulations.loadLanguage(langIndex) else Labels()
 
 
 
@@ -46,15 +48,15 @@ fun FrameWindowScope.MainView(state: WindowState, exitApp: () -> Unit) {
 
             WindowDraggableArea { DraggableArea(state, { exitApp.invoke() }, langIndex, {langIndex = it}, itemSize) }
 
-            TopBar({searchIndex = it}, tfText, {tfText = it}, itemSize, {itemSize = it}, langIndex)
+            TopBar({searchIndex = it}, tfText, {tfText = it}, itemSize, {itemSize = it}, labels)
 
             Divider(color = BasicColors.tertiaryBGColor, modifier = Modifier.shadow(8.dp))
 
             Box(Modifier.fillMaxSize()) {
 
-                LeftNavigationColumn( libIndex, {libIndex = it}, categoryIndex, {categoryIndex = it}, sectionIndex, {sectionIndex = it}, langIndex )
+                LeftNavigationColumn( libIndex, {libIndex = it}, categoryIndex, {categoryIndex = it}, sectionIndex, {sectionIndex = it}, labels )
 
-                MiddleGrid( searchList.ifEmpty { mainList }, itemSize, selectedItemList, {selectedItem = it} )
+                MiddleGrid( searchList.ifEmpty { mainList }, itemSize, selectedItemsList, {selectedItem = it}, labels  )
 
                 RightInfoColumn(selectedItem)
 

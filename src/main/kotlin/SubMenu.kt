@@ -65,6 +65,7 @@ fun SubMenu(
             modifier = Modifier
                 .background(BasicColors.primaryBGColor, RoundedCornerShape(4.dp))
                 .border(1.dp, BasicColors.tertiaryBGColor, RoundedCornerShape(4.dp))
+                .pointerMoveFilter(onExit = { expandLamb(false); false })
         ) {
 
             if (list.isNotEmpty()) {

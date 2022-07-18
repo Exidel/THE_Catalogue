@@ -256,7 +256,10 @@ object DirManipulations {
                         Labels().sortDDMenu + "\n" +
                         Labels().menuList + "\n" +
                         Labels().open + "\n" +
-                        Labels().delete + "\n"
+                        Labels().delete + "\n" +
+                        Labels().yes + "\n" +
+                        Labels().no + "\n" +
+                        Labels().message + "\n"
             )
 
         } else {
@@ -272,7 +275,10 @@ object DirManipulations {
                             Labels().sortDDMenu + "\n" +
                             Labels().menuList + "\n" +
                             Labels().open + "\n" +
-                            Labels().delete + "\n"
+                            Labels().delete + "\n" +
+                            Labels().yes + "\n" +
+                            Labels().no + "\n" +
+                            Labels().message + "\n"
                 )
         }
 
@@ -301,7 +307,10 @@ object DirManipulations {
                     sortDDMenu = lang[5].removeSurrounding("[", "]").split(", "),
                     menuList = lang[6].removeSurrounding("[", "]").split(", "),
                     open = lang[7],
-                    delete = lang[8]
+                    delete = lang[8],
+                    yes = lang[9],
+                    no = lang[10],
+                    message = lang[11]
                 )
             } else Labels()
         } catch (e: Exception) { e.printStackTrace() }

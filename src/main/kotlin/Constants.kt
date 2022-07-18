@@ -17,7 +17,12 @@ class Labels(
 
     /** EditMenu */
     val open: String = "Open",
-    val delete: String = "Delete"
+    val delete: String = "Delete",
+
+    /** DeleteDialog */
+    val yes: String = "Yes",
+    val no: String = "No",
+    val message: String = "Delete selected?"
 )
 
 

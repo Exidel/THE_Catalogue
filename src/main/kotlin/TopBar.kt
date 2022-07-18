@@ -21,12 +21,11 @@ fun TopBar(
     tfTextLamb: (String) -> Unit,
     size: Float,
     sizeLamb: (Float) -> Unit,
-    langIndex: Int
+    labels: Labels
 ) {
 
     var sortIndexPlug by remember { mutableStateOf(0) }
     var slider by remember { mutableStateOf(size) }
-    val labels = if (langIndex > 0) DirManipulations.loadLanguage(langIndex) else Labels()
 
 
     Row(
@@ -35,7 +34,7 @@ fun TopBar(
         modifier = Modifier.padding(10.dp)
     ) {
 
-        TextFieldWithMenu(indexLamb, tfText, tfTextLamb, langIndex)
+        TextFieldWithMenu(indexLamb, tfText, tfTextLamb, labels)
 
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             Text(labels.sort + ":", maxLines = 1, style = Styles.textStyle)
