@@ -9,14 +9,21 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.rememberDialogState
 
 
+
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun DeleteDialog(
     isOpenLamb: (Boolean) -> Unit,
@@ -33,12 +40,13 @@ fun DeleteDialog(
         state = dialogState,
         undecorated = true,
         transparent = true,
-        resizable = false
+        resizable = false,
+        onKeyEvent = { if (it.key == Key.Escape && it.type == KeyEventType.KeyUp) isOpenLamb(false); true}
     ) {
 
         WindowDraggableArea {
 
-            Box(Modifier.background(Color.Transparent).fillMaxWidth()) {
+            Box(Modifier.background(Color.Transparent)) {
 
                 Box(
                     Modifier

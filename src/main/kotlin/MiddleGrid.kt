@@ -50,12 +50,7 @@ fun MiddleGrid(
                 contentDescription = null,
                 modifier = Modifier
                     .size(48.dp)
-                    .clickable {
-                        if (selectedItemsList.isNotEmpty()) {
-                            deleteDialog = true
-                            println(selectedItemsList.map { it })
-                        }
-                    }
+                    .clickable { if (selectedItemsList.isNotEmpty()) deleteDialog = true }
                     .padding(5.dp),
                 tint = Color.White)
         }

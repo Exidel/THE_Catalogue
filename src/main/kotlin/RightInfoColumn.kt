@@ -1,4 +1,5 @@
 import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -7,6 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -49,7 +51,13 @@ fun BoxScope.RightInfoColumn(selectedItem: String) {
                 painter = painterResource("folder.png"),
                 contentDescription = null,
                 tint = Color.White,
-                modifier = Modifier.size(24.dp).clickable { DirManipulations.openDir(path) }
+                modifier = Modifier
+                    .size(24.dp)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = rememberRipple(bounded = false),
+                        onClick = { DirManipulations.openDir(path) }
+                    )
             )
 
 
@@ -57,7 +65,10 @@ fun BoxScope.RightInfoColumn(selectedItem: String) {
                 imageVector = Icons.Rounded.Done,
                 contentDescription = null,
                 tint = Color.White,
-                modifier = Modifier.clickable {
+                modifier = Modifier.clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(bounded = false)
+                ) {
                     info = tfText
                     tfText = ""
                     DirManipulations.createInfo(info, path)
@@ -70,7 +81,10 @@ fun BoxScope.RightInfoColumn(selectedItem: String) {
                 imageVector = if (edit) Icons.Rounded.Close else Icons.Rounded.Edit,
                 contentDescription = null,
                 tint = Color.White,
-                modifier = Modifier.clickable {
+                modifier = Modifier.clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(bounded = false)
+                ) {
                     edit = !edit
                     tfText = info
                 }
