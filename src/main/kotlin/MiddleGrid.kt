@@ -159,7 +159,7 @@ fun MiddleGrid(
         DeleteDialog(
             isOpenLamb = {deleteDialog = it},
             labels = labels,
-            message = message,
+            message = selectedItemsList,
             delete = {
                 if (selectedItemsList.isNotEmpty()) {
                     selectedItemsList.forEach { DirManipulations.removeDir(Path(it).parent.pathString) }

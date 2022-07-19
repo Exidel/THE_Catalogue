@@ -1,5 +1,7 @@
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.window.WindowDraggableArea
@@ -8,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -17,8 +20,12 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberDialogState
 
 
@@ -28,12 +35,11 @@ import androidx.compose.ui.window.rememberDialogState
 fun DeleteDialog(
     isOpenLamb: (Boolean) -> Unit,
     labels: Labels,
-    message: String,
+    message: List<String>,
     delete: () -> Unit
 ) {
 
-    val scrollState = rememberScrollState()
-    val dialogState = rememberDialogState()
+    val dialogState = rememberDialogState(size = DpSize.Unspecified)
 
     Dialog(
         onCloseRequest = { isOpenLamb(false) },
@@ -46,11 +52,12 @@ fun DeleteDialog(
 
         WindowDraggableArea {
 
-            Box(Modifier.background(Color.Transparent)) {
+            Box(Modifier.background(Color.Transparent).wrapContentSize()) {
 
                 Box(
                     Modifier
                         .padding(top = 24.dp, bottom = 12.dp)
+                        .heightIn(min = 100.dp, max = 200.dp)
                         .background(BasicColors.primaryBGColor, RoundedCornerShape(8.dp))
                         .border(2.dp, BasicColors.tertiaryBGColor, RoundedCornerShape(8.dp))
                         .padding(start = 20.dp, end = 20.dp, top = 32.dp, bottom = 32.dp)
@@ -58,10 +65,17 @@ fun DeleteDialog(
 
                     Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
 
-                        Text(labels.message, style = Styles.textStyle, textAlign = TextAlign.Justify, modifier = Modifier.align(Alignment.CenterHorizontally))
+                        Text(
+                            text = labels.message,
+                            style = Styles.textStyle.copy(fontSize = 20.sp),
+                            textAlign = TextAlign.Justify,
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
 
-                        Box(Modifier.verticalScroll(scrollState)) {
-                            Text(message, style = Styles.textStyle, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+                        LazyColumn(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                            items(message) { _message ->
+                                Text(_message, style = Styles.textStyle)
+                            }
                         }
 
                     }

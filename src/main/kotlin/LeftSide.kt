@@ -1,21 +1,25 @@
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.areAnyPressed
 import androidx.compose.ui.input.pointer.isPrimaryPressed
 import androidx.compose.ui.input.pointer.isSecondaryPressed
+import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.unit.dp
 import kotlin.io.path.name
 import kotlin.io.path.pathString
 
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun BoxScope.LeftNavigationColumn(
     libIndex: Int,
@@ -61,7 +65,12 @@ fun BoxScope.LeftNavigationColumn(
 
             if (secList.isNotEmpty()) {
 
+                var selectedItem by remember { mutableStateOf("") }
+
                 secList.map { it.name }.forEachIndexed { _index, _item ->
+
+                    var hovered by remember { mutableStateOf(false) }
+                    var selected by remember { mutableStateOf(false) }
 
                     Text(
                         text = _item,
@@ -69,8 +78,19 @@ fun BoxScope.LeftNavigationColumn(
                         style = Styles.textStyle,
                         modifier = Modifier
                             .fillMaxWidth()
+                            .background(if (hovered ||
+                                ( (selected && (sectionIndex == _index)) && (selectedItem == _item) )
+                            ) BasicColors.secondaryBGColor else BasicColors.primaryBGColor)
+                            .pointerMoveFilter(
+                                onEnter = { hovered = true; false },
+                                onExit = { hovered = false; false }
+                            )
                             .mouseClickable {
-                                if (this.buttons.isPrimaryPressed) secLamb(_index)
+                                if (this.buttons.isPrimaryPressed) {
+                                    secLamb(_index)
+                                    selected = true
+                                    selectedItem = _item
+                                }
                                 else if (this.buttons.isSecondaryPressed) {
                                     secLamb(_index)
                                     editMenu = true
@@ -99,7 +119,7 @@ fun BoxScope.LeftNavigationColumn(
     if (deleteDialog) DeleteDialog(
         isOpenLamb = {deleteDialog = it},
         labels = labels,
-        message = secList[sectionIndex].pathString,
+        message = listOf(secList[sectionIndex].pathString),
         delete = {dm.removeDir(secList[sectionIndex].pathString)} )
 
 }
