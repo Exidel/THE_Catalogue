@@ -36,7 +36,7 @@ fun FrameWindowScope.MainView(state: WindowState, exitApp: () -> Unit) {
 
 
 /** Localization variables */
-    var langIndex by remember { mutableStateOf(0) }
+    var langIndex by remember { mutableStateOf(DirManipulations.loadSettings().lang) }
     val labels = if (langIndex > 0) DirManipulations.loadLanguage(langIndex) else Labels()
 
 
