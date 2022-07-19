@@ -1,5 +1,6 @@
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,6 +11,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.areAnyPressed
 import androidx.compose.ui.input.pointer.isPrimaryPressed
 import androidx.compose.ui.input.pointer.isSecondaryPressed
@@ -61,6 +64,7 @@ fun BoxScope.LeftNavigationColumn(
                 .fillMaxSize()
                 .background( BasicColors.primaryBGColor, RoundedCornerShape(4.dp) )
                 .border( 2.dp, BasicColors.tertiaryBGColor, RoundedCornerShape(4.dp) )
+                .clip(RoundedCornerShape(4.dp))
         ) {
 
             if (secList.isNotEmpty()) {
@@ -80,7 +84,7 @@ fun BoxScope.LeftNavigationColumn(
                             .fillMaxWidth()
                             .background(if (hovered ||
                                 ( (selected && (sectionIndex == _index)) && (selectedItem == _item) )
-                            ) BasicColors.secondaryBGColor else BasicColors.primaryBGColor)
+                            ) BasicColors.secondaryBGColor.copy(alpha = 0.5f) else Color.Transparent)
                             .pointerMoveFilter(
                                 onEnter = { hovered = true; false },
                                 onExit = { hovered = false; false }
@@ -96,6 +100,7 @@ fun BoxScope.LeftNavigationColumn(
                                     editMenu = true
                                 }
                             }
+                            .mouseClickableIndication(remember { MutableInteractionSource() }) {}
                             .padding(10.dp, 8.dp)
                     )
 
