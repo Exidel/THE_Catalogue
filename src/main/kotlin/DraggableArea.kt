@@ -16,9 +16,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
+import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
+import javax.swing.JFileChooser
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -33,6 +36,9 @@ fun DraggableArea(
 
     var hover by remember { mutableStateOf(false) }
     var enableLOGOShadow by remember { mutableStateOf(DirManipulations.loadSettings().logo) }
+    var rootDirectory by remember { mutableStateOf("") }
+    val fileChooser = JFileChooser()
+        fileChooser.fileSelectionMode = JFileChooser.DIRECTORIES_ONLY
 
 
     Column {
@@ -41,11 +47,19 @@ fun DraggableArea(
             MainMenu(
                 enable = enableLOGOShadow,
                 enableLamb = {enableLOGOShadow = it},
-                state = state,
+                resetWindow = {
+                    state.size = DpSize(1200.dp, 800.dp)
+                    state.position = WindowPosition(Alignment.Center)
+                },
                 langIndex = langIndex,
                 langLamb = langLamb,
+                rootDirectory = {
+                    fileChooser.showDialog(null, "Select")
+                    rootDirectory = if (fileChooser.selectedFile != null) fileChooser.selectedFile.path else ""
+                    DirManipulations.saveSettings(state, langIndex, enableLOGOShadow, itemSize, rootDirectory)
+                },
                 exit = {
-                    DirManipulations.saveSettings(state, langIndex, enableLOGOShadow, itemSize)
+                    DirManipulations.saveSettings(state, langIndex, enableLOGOShadow, itemSize, rootDirectory)
                     close.invoke()
                 }
             )
@@ -107,7 +121,7 @@ fun DraggableArea(
                     Modifier.size(48.dp)
                         .background(if (hover) Color(1f, 0.4f, 0.4f, 1f) else BasicColors.secondaryBGColor)
                         .clickable {
-                            DirManipulations.saveSettings(state, langIndex, enableLOGOShadow, itemSize)
+                            DirManipulations.saveSettings(state, langIndex, enableLOGOShadow, itemSize, rootDirectory)
                             close.invoke()
                         }
                         .pointerMoveFilter(

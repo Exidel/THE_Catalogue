@@ -24,9 +24,10 @@ object DirManipulations {
     /** get directories list */
     fun getDirList(path: String = ""): List<Path> {
 
+        val rootDirectory = if (loadSettings().rootDirectory != "") loadSettings().rootDirectory else root
         val list = mutableListOf<Path>()
-        if (Files.notExists(Path(root))) createDirectory(Path(root))
-        val p: Path = if (path != "") Path(path) else Path(root)
+        if (Files.notExists(Path(rootDirectory))) createDirectory(Path(rootDirectory))
+        val p: Path = if (path != "") Path(path) else Path(rootDirectory)
 
         try {
             p.listDirectoryEntries().filter { it.isDirectory() }.forEach { list.add(it) }
@@ -41,11 +42,12 @@ object DirManipulations {
     /** get searching "everywhere" list */
     fun scanAll(): List<Path> {
 
+        val rootDirectory = if (loadSettings().rootDirectory != "") loadSettings().rootDirectory else root
         val list = mutableListOf<Path>()
 
-        if (Path(root).exists()) {
+        if (Path(rootDirectory).exists()) {
             try {
-                File(root).walkTopDown().filter { !it.isDirectory }.forEach { list.add(it.toPath()) }
+                File(rootDirectory).walkTopDown().filter { !it.isDirectory }.forEach { list.add(it.toPath()) }
             } catch (e: Exception) { e.printStackTrace() }
         }
 
@@ -206,12 +208,12 @@ object DirManipulations {
 /** SETTINGS */
 
     /** save settings.txt */
-    fun saveSettings(state: WindowState? = null, lang: Int = 0, logo: Boolean = false, size: Float = 128f) {
+    fun saveSettings(state: WindowState? = null, lang: Int = 0, logo: Boolean = false, size: Float = 128f, rootDirectory: String = "") {
 
         val settings: String = if (state != null)
             "${state.size.width.value}" + "\n" + "${state.size.height.value}" + "\n" +
             "${state.position.x.value}" + "\n" + "${state.position.y.value}" + "\n" +
-            "$lang" + "\n" + "$logo" + "\n" + "$size"
+            "$lang" + "\n" + "$logo" + "\n" + "$size" + "\n" + rootDirectory
         else ""
 
         if (settings.isNotEmpty()) File("settings.txt").writeText(settings, Charsets.UTF_8)
@@ -224,12 +226,15 @@ object DirManipulations {
 
         try {
             obj = if (list.isNotEmpty()) Settings(
-                winSize = DpSize(list[0].toFloat().dp, list[1].toFloat().dp),
-                winPosition = if (list[2].contains("NaN")) Settings().winPosition
-                                else WindowPosition(list[2].toFloat().dp, list[3].toFloat().dp),
-                lang = list[4].toInt(),
-                logo = list[5].toBoolean(),
-                itemSize = list[6].toFloat()
+                winSize = if (list[0].isNotEmpty() && list[1].isNotEmpty() && list.lastIndex >= 1)
+                    DpSize(list[0].toFloat().dp, list[1].toFloat().dp) else Settings().winSize,
+                winPosition = if ( !list[2].contains("NaN", true) && !list[3].contains("NaN", true) &&
+                    list[2].isNotEmpty() && list[3].isNotEmpty() && list.lastIndex >= 3)
+                    WindowPosition(list[2].toFloat().dp, list[3].toFloat().dp) else Settings().winPosition,
+                lang = if (list[4].isNotEmpty() && list.lastIndex >= 4) list[4].toInt() else Settings().lang,
+                logo = if (list[5].isNotEmpty() && list.lastIndex >= 5) list[5].toBoolean() else Settings().logo,
+                itemSize = if (list[6].isNotEmpty() && list.lastIndex >= 6) list[6].toFloat() else Settings().itemSize,
+                rootDirectory = if (list[7].isNotEmpty() && list.lastIndex >= 7) list[7] else Settings().rootDirectory
             ) else Settings()
         } catch (e: Exception) { File("settingsErrorLog.txt").writeText(e.stackTraceToString()) }
 
@@ -299,18 +304,21 @@ object DirManipulations {
         try {
             obj = if (lang.isNotEmpty()) {
                 Labels(
-                    firstDDLabel = lang[0],
-                    secondDDLabel = lang[1],
-                    sort = lang[2],
-                    size = lang[3],
-                    searchDDMenu = lang[4].removeSurrounding("[", "]").split(", "),
-                    sortDDMenu = lang[5].removeSurrounding("[", "]").split(", "),
-                    menuList = lang[6].removeSurrounding("[", "]").split(", "),
-                    open = lang[7],
-                    delete = lang[8],
-                    yes = lang[9],
-                    no = lang[10],
-                    message = lang[11]
+                    firstDDLabel = if (lang[0].isNotEmpty()) lang[0] else Labels().firstDDLabel,
+                    secondDDLabel = if (lang[1].isNotEmpty() && lang.lastIndex >= 1) lang[1] else Labels().secondDDLabel,
+                    sort = if (lang[2].isNotEmpty() && lang.lastIndex >= 2) lang[2] else Labels().sort,
+                    size = if (lang[3].isNotEmpty() && lang.lastIndex >= 3) lang[3] else Labels().size,
+                    searchDDMenu = if (lang[4].isNotEmpty() && lang.lastIndex >= 4) lang[4]
+                        .removeSurrounding("[", "]").split(", ") else Labels().searchDDMenu,
+                    sortDDMenu = if (lang[5].isNotEmpty() && lang.lastIndex >= 5) lang[5]
+                        .removeSurrounding("[", "]").split(", ") else Labels().sortDDMenu,
+                    menuList = if (lang[6].isNotEmpty() && lang.lastIndex >= 6) lang[6]
+                        .removeSurrounding("[", "]").split(", ") else Labels().menuList,
+                    open = if (lang[7].isNotEmpty() && lang.lastIndex >= 7) lang[7] else Labels().open,
+                    delete = if (lang[8].isNotEmpty() && lang.lastIndex >= 8) lang[8] else Labels().delete,
+                    yes = if (lang[9].isNotEmpty() && lang.lastIndex >= 9) lang[9] else Labels().yes,
+                    no = if (lang[10].isNotEmpty() && lang.lastIndex >= 10) lang[10] else Labels().no,
+                    message = if (lang[11].isNotEmpty() && lang.lastIndex >= 11) lang[11] else Labels().message
                 )
             } else Labels()
         } catch (e: Exception) { e.printStackTrace() }
@@ -331,5 +339,6 @@ data class Settings(
     val winPosition: WindowPosition = WindowPosition(Alignment.Center),
     val lang: Int = 0,
     val logo: Boolean = false,
-    val itemSize: Float = 128f
+    val itemSize: Float = 128f,
+    val rootDirectory: String = ""
 )

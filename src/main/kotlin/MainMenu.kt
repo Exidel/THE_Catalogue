@@ -15,10 +15,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerMoveFilter
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.WindowPosition
-import androidx.compose.ui.window.WindowState
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -26,15 +23,17 @@ import androidx.compose.ui.window.WindowState
 fun BoxScope.MainMenu(
     enable: Boolean,
     enableLamb: (Boolean) -> Unit,
-    state: WindowState,
+    resetWindow: () -> Unit,
     langIndex: Int,
     langLamb: (Int) -> Unit,
+    rootDirectory: () -> Unit,
     exit: () -> Unit
 ) {
 
     var expand by remember { mutableStateOf(false) }
     var langMenu by remember { mutableStateOf(false) }
-    val labels = if (langIndex > 0) DirManipulations.loadLanguage(langIndex).menuList else Labels().menuList
+    val labels = if (langIndex > 0) DirManipulations.loadLanguage(langIndex) else Labels()
+
 
     Box(Modifier.wrapContentSize().size(48.dp).align(Alignment.CenterStart).clickable { expand = !expand }) {
 
@@ -54,7 +53,17 @@ fun BoxScope.MainMenu(
                 .border(1.dp, BasicColors.tertiaryBGColor, RoundedCornerShape(4.dp))
         ) {
 
-            Text(text = labels[0], maxLines = 1, style = Styles.textStyle, modifier = Modifier
+            Text(text = labels.open, maxLines = 1, style = Styles.textStyle, modifier = Modifier
+                .fillMaxWidth()
+                .pointerMoveFilter(onEnter = { langMenu = false; false })
+                .clickable { rootDirectory.invoke() }
+                .padding(10.dp, 4.dp)
+            )
+
+            Divider(color = BasicColors.tertiaryBGColor)
+
+
+            Text(text = labels.menuList[0], maxLines = 1, style = Styles.textStyle, modifier = Modifier
                 .fillMaxWidth()
                 .pointerMoveFilter(onEnter = { langMenu = false; false })
                 .clickable { enableLamb(!enable) }
@@ -64,25 +73,22 @@ fun BoxScope.MainMenu(
             Divider(color = BasicColors.tertiaryBGColor)
 
 
-            Text(text = labels[1], maxLines = 1, style = Styles.textStyle, modifier = Modifier
+            Text(text = labels.menuList[1], maxLines = 1, style = Styles.textStyle, modifier = Modifier
                 .fillMaxWidth()
                 .pointerMoveFilter(onEnter = { langMenu = false; false })
-                .clickable {
-                    state.size = DpSize(1200.dp, 800.dp)
-                    state.position = WindowPosition(Alignment.Center)
-                }
+                .clickable { resetWindow.invoke() }
                 .padding(10.dp, 4.dp)
             )
 
             Divider(color = BasicColors.tertiaryBGColor)
 
 
-            SubMenu(labels[2], langMenu, { langMenu = it }, langLamb)
+            SubMenu(labels.menuList[2], langMenu, { langMenu = it }, langLamb)
 
             Divider(color = BasicColors.tertiaryBGColor)
 
 
-            Text(text = labels[3], maxLines = 1, style = Styles.textStyle, modifier = Modifier
+            Text(text = labels.menuList[3], maxLines = 1, style = Styles.textStyle, modifier = Modifier
                 .fillMaxWidth()
                 .pointerMoveFilter(onEnter = { langMenu = false; false })
                 .clickable { exit.invoke() }

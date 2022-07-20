@@ -1,10 +1,7 @@
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -68,7 +65,7 @@ fun MiddleGrid(
 
                 if (list.isNotEmpty()) {
 
-                    itemsIndexed(list) { _, _item ->
+                    items(list) { _item ->
 
                         var check by remember { mutableStateOf(false) }
 
@@ -87,9 +84,7 @@ fun MiddleGrid(
                                         onClick = { selectedItem(_item) },
                                         onDoubleClick = {
                                             selectedItem(_item)
-                                            DirManipulations.openDir(
-                                                Path(_item).parent.pathString
-                                            )
+                                            DirManipulations.openDir( Path(_item).parent.pathString )
                                         }
                                     )
                             ) {
@@ -138,15 +133,17 @@ fun MiddleGrid(
             }
 
 
-            VerticalScrollbar(
-                adapter = ScrollbarAdapter(scrollState),
-                modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd),
-                style = defaultScrollbarStyle().copy(
-                    unhoverColor = BasicColors.secondaryBGColor.copy(alpha = 0.5f),
-                    hoverColor = BasicColors.tertiaryBGColor.copy(alpha = 1f),
-                    hoverDurationMillis = 200
+            if (list.isNotEmpty()) {
+                VerticalScrollbar(
+                    adapter = ScrollbarAdapter(scrollState),
+                    modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd),
+                    style = defaultScrollbarStyle().copy(
+                        unhoverColor = BasicColors.secondaryBGColor.copy(alpha = 0.5f),
+                        hoverColor = BasicColors.tertiaryBGColor.copy(alpha = 1f),
+                        hoverDurationMillis = 200
+                    )
                 )
-            )
+            }
 
         }
 
@@ -154,12 +151,12 @@ fun MiddleGrid(
 
 
     if (deleteDialog) {
-        var message = ""
-        selectedItemsList.forEach { message += it + "\n\n"}
+        val messages: MutableSet<String> = mutableSetOf()
+        selectedItemsList.forEach { messages.add(Path(it).parent.pathString) }
         DeleteDialog(
             isOpenLamb = {deleteDialog = it},
             labels = labels,
-            message = selectedItemsList,
+            message = messages.toList(),
             delete = {
                 if (selectedItemsList.isNotEmpty()) {
                     selectedItemsList.forEach { DirManipulations.removeDir(Path(it).parent.pathString) }

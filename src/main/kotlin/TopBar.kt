@@ -51,14 +51,14 @@ fun TopBar(
                     slider = it
                     sizeLamb( (( (slider).roundToInt()/64)*64).toFloat() )
                 },
-                steps = 2,
+                steps = 1,
                 modifier = Modifier.width(100.dp),
                 colors = SliderDefaults.colors(
                     thumbColor = BasicColors.tertiaryBGColor,
                     activeTrackColor = Color.White,
                     inactiveTrackColor = BasicColors.primaryBGColor,
                 ),
-                valueRange = 64f..256f
+                valueRange = 128f..256f
             )
         }
 
