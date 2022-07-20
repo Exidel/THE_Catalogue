@@ -213,7 +213,7 @@ object DirManipulations {
         val settings: String = if (state != null)
             "${state.size.width.value}" + "\n" + "${state.size.height.value}" + "\n" +
             "${state.position.x.value}" + "\n" + "${state.position.y.value}" + "\n" +
-            "$lang" + "\n" + "$logo" + "\n" + "$size" + "\n" + rootDirectory
+            "$lang" + "\n" + "$logo" + "\n" + "$size" + if (rootDirectory != "") "\n" + rootDirectory else ""
         else ""
 
         if (settings.isNotEmpty()) File("settings.txt").writeText(settings, Charsets.UTF_8)

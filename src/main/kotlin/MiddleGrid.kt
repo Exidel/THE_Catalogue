@@ -24,7 +24,7 @@ import kotlin.io.path.pathString
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MiddleGrid(
-    list: List<String>,
+    list: MutableList<String>,
     size: Float,
     selectedItemsList: SnapshotStateList<String>,
     selectedItem: (String) -> Unit,
@@ -160,6 +160,7 @@ fun MiddleGrid(
             delete = {
                 if (selectedItemsList.isNotEmpty()) {
                     selectedItemsList.forEach { DirManipulations.removeDir(Path(it).parent.pathString) }
+                    list.removeAll(selectedItemsList)
                     selectedItemsList.clear()
                 }
             }

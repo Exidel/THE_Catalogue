@@ -24,7 +24,7 @@ fun FrameWindowScope.MainView(state: WindowState, exitApp: () -> Unit) {
 
 /** LazyGrid variables */
     var itemSize by remember { mutableStateOf(DirManipulations.loadSettings().itemSize)}
-    val mainList: List<String> = DirManipulations.getMainList(libIndex, categoryIndex, sectionIndex)
+    val mainList: MutableList<String> = DirManipulations.getMainList(libIndex, categoryIndex, sectionIndex).toMutableList()
     var selectedItem by remember { mutableStateOf("") }
     val selectedItemsList: SnapshotStateList<String> = remember { mutableStateListOf() }
 
@@ -32,7 +32,7 @@ fun FrameWindowScope.MainView(state: WindowState, exitApp: () -> Unit) {
 /** Search variables */
     var tfText by remember { mutableStateOf("") }
     var searchIndex by remember { mutableStateOf(0) }
-    val searchList: List<String> = DirManipulations.getSearchList(tfText, libIndex, categoryIndex, sectionIndex, searchIndex)
+    val searchList: MutableList<String> = DirManipulations.getSearchList(tfText, libIndex, categoryIndex, sectionIndex, searchIndex).toMutableList()
 
 
 /** Localization variables */

@@ -36,7 +36,7 @@ fun DraggableArea(
 
     var hover by remember { mutableStateOf(false) }
     var enableLOGOShadow by remember { mutableStateOf(DirManipulations.loadSettings().logo) }
-    var rootDirectory by remember { mutableStateOf("") }
+    var rootDirectory by remember { mutableStateOf(DirManipulations.loadSettings().rootDirectory) }
     val fileChooser = JFileChooser()
         fileChooser.fileSelectionMode = JFileChooser.DIRECTORIES_ONLY
 
