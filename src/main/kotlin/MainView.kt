@@ -40,6 +40,8 @@ fun FrameWindowScope.MainView(state: WindowState, exitApp: () -> Unit) {
     val labels = if (langIndex > 0) DirManipulations.loadLanguage(langIndex) else Labels()
 
 
+    LaunchedEffect(libIndex, categoryIndex, sectionIndex) { selectedItem = "" }
+
 
 /** UI */
     Box(Modifier.fillMaxSize().background(BasicColors.secondaryBGColor)) {

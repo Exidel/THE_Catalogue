@@ -11,17 +11,22 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.BlurredEdgeTreatment
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -80,6 +85,7 @@ fun DeleteDialog(
                 }
 
 
+
                 Icon(
                     Icons.Rounded.Delete,
                     null,
@@ -91,6 +97,7 @@ fun DeleteDialog(
                         .padding(5.dp),
                     Color.White
                 )
+
 
 
                 Row(
@@ -120,6 +127,8 @@ fun DeleteDialog(
                         Text(labels.no, style = Styles.textStyle, modifier = Modifier.align(Alignment.Center))
                     }
                 }
+
+
 
             }
 
