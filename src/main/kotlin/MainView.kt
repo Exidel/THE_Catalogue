@@ -27,6 +27,7 @@ fun FrameWindowScope.MainView(state: WindowState, exitApp: () -> Unit) {
     val mainList: MutableList<String> = DirManipulations.getMainList(libIndex, categoryIndex, sectionIndex).toMutableList()
     var selectedItem by remember { mutableStateOf("") }
     val selectedItemsList: SnapshotStateList<String> = remember { mutableStateListOf() }
+    var sortIndex by remember { mutableStateOf(0) }
 
 
 /** Search variables */
@@ -50,7 +51,7 @@ fun FrameWindowScope.MainView(state: WindowState, exitApp: () -> Unit) {
 
             WindowDraggableArea { DraggableArea(state, { exitApp.invoke() }, langIndex, {langIndex = it}, itemSize) }
 
-            TopBar({searchIndex = it}, tfText, {tfText = it}, itemSize, {itemSize = it}, labels)
+            TopBar({searchIndex = it}, tfText, {tfText = it}, itemSize, {itemSize = it}, labels, {sortIndex = it})
 
             Divider(color = BasicColors.tertiaryBGColor, modifier = Modifier.shadow(8.dp))
 
@@ -58,7 +59,7 @@ fun FrameWindowScope.MainView(state: WindowState, exitApp: () -> Unit) {
 
                 LeftNavigationColumn( libIndex, {libIndex = it}, categoryIndex, {categoryIndex = it}, sectionIndex, {sectionIndex = it}, labels )
 
-                MiddleGrid( searchList.ifEmpty { mainList }, itemSize, selectedItemsList, {selectedItem = it}, labels  )
+                MiddleGrid( searchList.ifEmpty { mainList }, itemSize, selectedItemsList, {selectedItem = it}, labels, sortIndex )
 
                 RightInfoColumn(selectedItem)
 

@@ -12,7 +12,7 @@ class Labels(
     val sort: String = "Sort",
     val size: String = "Size",
     val searchDDMenu: List<String> = listOf("All", "Library", "Category", "Section"),
-    val sortDDMenu: List<String> = listOf("None", "Name", "Date"),
+    val sortDDMenu: List<String> = listOf("None", "Name: A - Z", "Name: Z - A"),
     val menuList: List<String> = listOf("LOGO shadow", "Reset window size", "Language", "Exit"),
 
     /** EditMenu */

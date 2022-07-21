@@ -21,10 +21,10 @@ fun TopBar(
     tfTextLamb: (String) -> Unit,
     size: Float,
     sizeLamb: (Float) -> Unit,
-    labels: Labels
+    labels: Labels,
+    sortIndex: (Int) -> Unit
 ) {
 
-    var sortIndexPlug by remember { mutableStateOf(0) }
     var slider by remember { mutableStateOf(size) }
 
 
@@ -39,7 +39,7 @@ fun TopBar(
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             Text(labels.sort + ":", maxLines = 1, style = Styles.textStyle)
 
-            DDMenu(labels.sortDDMenu, {sortIndexPlug = it}, 150.dp, RoundedCornerShape(4.dp))
+            DDMenu(labels.sortDDMenu, sortIndex, 150.dp, RoundedCornerShape(4.dp))
         }
 
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {

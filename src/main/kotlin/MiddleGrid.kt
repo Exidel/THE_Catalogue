@@ -15,10 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import kotlin.io.path.Path
-import kotlin.io.path.exists
-import kotlin.io.path.pathString
-
+import kotlin.io.path.*
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -28,7 +25,8 @@ fun MiddleGrid(
     size: Float,
     selectedItemsList: SnapshotStateList<String>,
     selectedItem: (String) -> Unit,
-    labels: Labels
+    labels: Labels,
+    sortIndex: Int
 ) {
 
     val scrollState = rememberLazyListState(0)
@@ -64,8 +62,14 @@ fun MiddleGrid(
             ) {
 
                 if (list.isNotEmpty()) {
-
-                    items(list) { _item ->
+                    items(
+                        when(sortIndex) {
+                            0 -> list
+                            1 -> list.sortedBy { Path(it).nameWithoutExtension.lowercase() }
+                            2 -> list.sortedByDescending { Path(it).nameWithoutExtension.lowercase() }
+                            else -> list
+                        }
+                    ) { _item ->
 
                         var check by remember { mutableStateOf(false) }
 
