@@ -30,7 +30,7 @@ fun MiddleGrid(
 ) {
 
     val scrollState = rememberLazyListState(0)
-    var deleteIcon by remember { mutableStateOf(selectedItemsList.isNotEmpty())}
+    var deleteIcon by mutableStateOf(selectedItemsList.isNotEmpty())
     var deleteDialog by remember { mutableStateOf(false) }
 
 
@@ -72,6 +72,7 @@ fun MiddleGrid(
                     ) { _item ->
 
                         var check by remember { mutableStateOf(false) }
+                        if (selectedItemsList.isEmpty()) check = false
 
                         TooltipArea(
                             tooltip = { Text(_item, style = Styles.textStyle, modifier = Modifier

@@ -42,6 +42,7 @@ fun FrameWindowScope.MainView(state: WindowState, exitApp: () -> Unit) {
 
 
     LaunchedEffect(libIndex, categoryIndex, sectionIndex) { selectedItem = "" }
+    LaunchedEffect(tfText) { selectedItemsList.clear() }
 
 
 /** UI */
