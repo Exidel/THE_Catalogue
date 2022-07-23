@@ -31,6 +31,9 @@ compose.desktop {
             targetFormats(TargetFormat.Exe)
             packageName = "THE_Catalogue"
             packageVersion = "1.0.0"
+            version = "1.0.0-stable"
+            vendor = "Exidel"
+            description = "Shell for working with material libraries"
             windows {
                     iconFile.set(project.file("src\\main\\resources\\catalogue.ico"))
             }

@@ -340,5 +340,5 @@ data class Settings(
     val lang: Int = 0,
     val logo: Boolean = false,
     val itemSize: Float = 128f,
-    val rootDirectory: String = ""
+    val rootDirectory: String = "Resources/"
 )

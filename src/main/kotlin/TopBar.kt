@@ -9,6 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlin.math.roundToInt
@@ -22,7 +23,8 @@ fun TopBar(
     size: Float,
     sizeLamb: (Float) -> Unit,
     labels: Labels,
-    sortIndex: (Int) -> Unit
+    sortIndex: (Int) -> Unit,
+    mouseClickPosition: Offset
 ) {
 
     var slider by remember { mutableStateOf(size) }
@@ -34,7 +36,7 @@ fun TopBar(
         modifier = Modifier.padding(10.dp)
     ) {
 
-        TextFieldWithMenu(indexLamb, tfText, tfTextLamb, labels)
+        TextFieldWithMenu(indexLamb, tfText, tfTextLamb, labels, mouseClickPosition)
 
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             Text(labels.sort + ":", maxLines = 1, style = Styles.textStyle)
