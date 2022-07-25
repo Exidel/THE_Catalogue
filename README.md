@@ -1,6 +1,8 @@
 # THE_Catalogue
 
-A highly specialized program for storing and sorting materials and related files.
+A shell to manage material libraries for your programs.
+
+Each material must be in a separate folder and contain a preview_name.jpg graphic file for display in the table.
 
 
 # Project trailer:
