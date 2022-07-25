@@ -1,40 +1,129 @@
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.mouseClickable
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.input.pointer.isPrimaryPressed
+import androidx.compose.ui.input.pointer.isSecondaryPressed
+import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.unit.dp
+import kotlin.io.path.name
+import kotlin.io.path.pathString
 
 
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun LeftNavigationColumn(modifier: Modifier) {
+fun BoxScope.LeftNavigationColumn(
+    libIndex: Int,
+    libLamb: (Int) -> Unit,
+    categoryIndex: Int,
+    catLamb: (Int) -> Unit,
+    sectionIndex: Int,
+    secLamb: (Int) -> Unit,
+    labels: Labels
+) {
 
-    val list = mutableListOf("11", "22", "33")
-    val list2 = mutableListOf("44", "55", "66")
+    var editMenu by remember { mutableStateOf(false) }
+    var deleteDialog by remember { mutableStateOf(false) }
+    val dm = DirManipulations
+    val libList = dm.getDirList()
+    val catList = if (libIndex <= libList.lastIndex) dm.getDirList(libList[libIndex].pathString) else listOf()
+    val secList = if (libIndex <= libList.lastIndex && categoryIndex <= catList.lastIndex) dm.getDirList(catList[categoryIndex].pathString) else listOf()
+
 
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp),
-        modifier = modifier
+        modifier = Modifier
+            .align(Alignment.TopStart)
             .fillMaxHeight()
             .width(250.dp)
             .padding(10.dp)
     ) {
 
-        LabelText(Labels().firstDDLabel + ":")
+        Text(labels.firstDDLabel + ":", maxLines = 1, style = Styles.textStyle)
 
-        DDMenu(list, 230.dp, RoundedCornerShape(4.dp))
+        DDMenu(dm.getDirList().map { it.name }, { libLamb(it) }, 230.dp, RoundedCornerShape(4.dp))
 
-        LabelText(Labels().secondDDLabel + ":")
+        Text(labels.secondDDLabel + ":", maxLines = 1, style = Styles.textStyle)
 
-        DDMenu(list2, 230.dp, RoundedCornerShape(4.dp))
+        DDMenu(catList.map { it.name }, { catLamb(it) }, 230.dp, RoundedCornerShape(4.dp))
 
-        Column(Modifier.fillMaxSize().border(2.dp, BasicColors.tertiaryBGColor, RoundedCornerShape(4.dp))) {}
+        Column(
+            Modifier
+                .fillMaxSize()
+                .background( BasicColors.primaryBGColor, RoundedCornerShape(4.dp) )
+                .border( 2.dp, BasicColors.tertiaryBGColor, RoundedCornerShape(4.dp) )
+                .clip(RoundedCornerShape(4.dp))
+        ) {
+
+            if (secList.isNotEmpty()) {
+
+                var selectedItem by remember { mutableStateOf("") }
+
+                secList.map { it.name }.forEachIndexed { _index, _item ->
+
+                    var hovered by remember { mutableStateOf(false) }
+                    var selected by remember { mutableStateOf(false) }
+
+                    Text(
+                        text = _item,
+                        maxLines = 1,
+                        style = Styles.textStyle,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(if (hovered ||
+                                ( (selected && (sectionIndex == _index)) && (selectedItem == _item) )
+                            ) BasicColors.secondaryBGColor.copy(alpha = 0.5f) else Color.Transparent)
+                            .pointerMoveFilter(
+                                onEnter = { hovered = true; false },
+                                onExit = { hovered = false; false }
+                            )
+                            .mouseClickable {
+                                if (this.buttons.isPrimaryPressed) {
+                                    secLamb(_index)
+                                    selected = true
+                                    selectedItem = _item
+                                }
+                                else if (this.buttons.isSecondaryPressed) {
+                                    secLamb(_index)
+                                    editMenu = true
+                                }
+                            }
+                            .mouseClickableIndication(remember { MutableInteractionSource() }) {}
+                            .padding(10.dp, 8.dp)
+                    )
+
+                    Divider(Modifier, BasicColors.tertiaryBGColor)
+
+                }
+
+            }
+
+            if (editMenu) EditMenu(
+                            editMenu,
+                            {editMenu = it},
+                            {dm.openDir(secList[sectionIndex].pathString)},
+                            {deleteDialog = true}
+                        )
+
+        }
 
     }
+
+    if (deleteDialog) DeleteDialog(
+        isOpenLamb = {deleteDialog = it},
+        labels = labels,
+        message = listOf(secList[sectionIndex].pathString),
+        delete = {dm.removeDir(secList[sectionIndex].pathString)} )
 
 }

@@ -1,28 +1,33 @@
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.material.Slider
+import androidx.compose.material.SliderDefaults
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import kotlin.math.roundToInt
 
 
 @Composable
-fun TopBar() {
+fun TopBar(
+    indexLamb: (Int) -> Unit,
+    tfText: String,
+    tfTextLamb: (String) -> Unit,
+    size: Float,
+    sizeLamb: (Float) -> Unit,
+    labels: Labels,
+    sortIndex: (Int) -> Unit,
+    mouseClickPosition: Offset
+) {
 
-    val list1 = listOf("lib", "sublib", "whatever")
-    val list2 = listOf("date", "name", "whatever")
-    var value by remember { mutableStateOf("") }
+    var slider by remember { mutableStateOf(size) }
 
 
     Row(
@@ -31,29 +36,32 @@ fun TopBar() {
         modifier = Modifier.padding(10.dp)
     ) {
 
-        Row(verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .height(IntrinsicSize.Min)
-                .shadow(8.dp, RoundedCornerShape(4.dp))
-                .border(1.dp, BasicColors.tertiaryBGColor, RoundedCornerShape(4.dp))
-        ) {
+        TextFieldWithMenu(indexLamb, tfText, tfTextLamb, labels, mouseClickPosition)
 
-            TextField(170.dp)
-            Divider(Modifier.fillMaxHeight().width(1.dp), BasicColors.tertiaryBGColor)
-            DDMenu(list1, 120.dp, RoundedCornerShape(0.dp), Dp.Unspecified, Dp.Unspecified)
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text(labels.sort + ":", maxLines = 1, style = Styles.textStyle)
 
+            DDMenu(labels.sortDDMenu, sortIndex, 150.dp, RoundedCornerShape(4.dp))
         }
 
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            LabelText(Labels().sort + ":")
+            Text(labels.size + ":", maxLines = 1, style = Styles.textStyle)
 
-            DDMenu(list2, 150.dp, RoundedCornerShape(4.dp))
-        }
-
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            LabelText(Labels().size + ":")
-
-            //TODO() draggable point
+            Slider(
+                value = slider,
+                onValueChange = {
+                    slider = it
+                    sizeLamb( (( (slider).roundToInt()/64)*64).toFloat() )
+                },
+                steps = 1,
+                modifier = Modifier.width(100.dp),
+                colors = SliderDefaults.colors(
+                    thumbColor = BasicColors.tertiaryBGColor,
+                    activeTrackColor = Color.White,
+                    inactiveTrackColor = BasicColors.primaryBGColor,
+                ),
+                valueRange = 128f..256f
+            )
         }
 
     }
