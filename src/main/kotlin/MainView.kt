@@ -48,7 +48,7 @@ fun FrameWindowScope.MainView(state: WindowState, exitApp: () -> Unit) {
 
 
     LaunchedEffect(libIndex, categoryIndex, sectionIndex) { selectedItem = "" }
-    LaunchedEffect(tfText) { selectedItemsList.clear() }
+    LaunchedEffect(tfText, libIndex, categoryIndex, sectionIndex, searchIndex) { selectedItemsList.clear() }
 
 
 /** UI */
@@ -80,7 +80,7 @@ fun FrameWindowScope.MainView(state: WindowState, exitApp: () -> Unit) {
 
                 LeftNavigationColumn( libIndex, {libIndex = it}, categoryIndex, {categoryIndex = it}, sectionIndex, {sectionIndex = it}, labels )
 
-                MiddleGrid( searchList.ifEmpty { mainList }, itemSize, selectedItemsList, {selectedItem = it}, labels, sortIndex )
+                MiddleGrid( if (tfText != "") searchList else mainList, itemSize, selectedItemsList, {selectedItem = it}, labels, sortIndex )
 
                 RightInfoColumn(selectedItem, mouseClickPosition)
 

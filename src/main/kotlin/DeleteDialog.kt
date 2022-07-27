@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
@@ -51,12 +52,45 @@ fun DeleteDialog(
 
         WindowDraggableArea {
 
-            Box(Modifier.background(Color.Transparent).wrapContentSize()) {
+            Box(Modifier.padding(8.dp)) {
+/** Shadows for Dialog icon & buttons */
+                Box(
+                    Modifier
+                        .align(Alignment.TopCenter)
+                        .size(48.dp)
+                        .shadow(8.dp, CircleShape)
+                        .background(BasicColors.primaryBGColor, CircleShape)
+                        .border(2.dp, BasicColors.tertiaryBGColor, CircleShape)
+                        .padding(5.dp)
+                )
 
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(20.dp),
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                ) {
+                    Box(
+                        Modifier
+                            .size(100.dp, 24.dp)
+                            .shadow(8.dp, RoundedCornerShape(4.dp))
+                            .background(Color.Transparent, RoundedCornerShape(4.dp))
+                    )
+
+                    Box(
+                        Modifier
+                            .size(100.dp, 24.dp)
+                            .shadow(8.dp, RoundedCornerShape(4.dp))
+                            .background(Color(0.6f, 0.2f, 0.2f, 1f), RoundedCornerShape(4.dp))
+                    )
+                }
+
+
+/** UI for Dialog */
                 Box(
                     Modifier
                         .padding(top = 24.dp, bottom = 12.dp)
                         .heightIn(min = 100.dp, max = 200.dp)
+                        .shadow(8.dp, RoundedCornerShape(8.dp), false)
                         .background(BasicColors.primaryBGColor, RoundedCornerShape(8.dp))
                         .border(2.dp, BasicColors.tertiaryBGColor, RoundedCornerShape(8.dp))
                         .padding(start = 20.dp, end = 20.dp, top = 32.dp, bottom = 32.dp)

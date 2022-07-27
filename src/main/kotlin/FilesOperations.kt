@@ -118,9 +118,9 @@ object DirManipulations {
 
                 0 -> if (scanAll().isNotEmpty()) {
                     scanAll().filter {
-                        it.nameWithoutExtension.contains(tfText, true)
-                                && it.name.contains(".jpg", true)
-                                && it.name.contains("preview", true)
+                        it.name.contains("preview", true) &&
+                        it.nameWithoutExtension.contains(tfText, true) &&
+                        it.name.contains(".jpg", true)
                     }
                         .map { it.pathString }
                 } else listOf()
@@ -130,9 +130,9 @@ object DirManipulations {
                     scanSelected(libList[libIndex].pathString).isNotEmpty()
                 ) {
                     scanSelected(libList[libIndex].pathString).filter {
-                        it.nameWithoutExtension.contains(tfText, true)
-                                && it.name.contains(".jpg", true)
-                                && it.name.contains("preview", true)
+                        it.name.contains("preview", true) &&
+                        it.nameWithoutExtension.contains(tfText, true) &&
+                        it.name.contains(".jpg", true)
                     }.map { it.pathString }
                 } else listOf()
 
@@ -142,9 +142,10 @@ object DirManipulations {
                     && scanSelected(catList[categoryIndex].pathString).isNotEmpty()
                 ) {
                     scanSelected(catList[categoryIndex].pathString)
-                        .filter { it.nameWithoutExtension.contains(tfText, true)
-                                && it.name.contains(".jpg", true)
-                                && it.name.contains("preview", true)
+                        .filter {
+                            it.name.contains("preview", true) &&
+                            it.nameWithoutExtension.contains(tfText, true) &&
+                            it.name.contains(".jpg", true)
                         }
                         .map { it.pathString }
                 } else listOf()
@@ -156,9 +157,10 @@ object DirManipulations {
                     && scanSelected(secList[sectionIndex].pathString).isNotEmpty()
                 ) {
                     scanSelected(secList[sectionIndex].pathString)
-                        .filter { it.nameWithoutExtension.contains(tfText, true)
-                                && it.name.contains(".jpg", true)
-                                && it.name.contains("preview", true)
+                        .filter {
+                            it.name.contains("preview", true) &&
+                            it.nameWithoutExtension.contains(tfText, true) &&
+                            it.name.contains(".jpg", true)
                         }
                         .map { it.pathString }
                 } else listOf()
