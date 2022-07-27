@@ -21,10 +21,11 @@ import kotlinx.coroutines.coroutineScope
 @Composable
 fun FrameWindowScope.MainView(state: WindowState, exitApp: () -> Unit) {
 
-/** Directory indexes */
+/** Directory variables */
     var libIndex by remember { mutableStateOf(0) }
     var categoryIndex by remember { mutableStateOf(0) }
     var sectionIndex by remember { mutableStateOf(0) }
+    var rootDirectory by remember { mutableStateOf(DirManipulations.loadSettings().rootDirectory) }
 
 
 /** LazyGrid variables */
@@ -70,7 +71,7 @@ fun FrameWindowScope.MainView(state: WindowState, exitApp: () -> Unit) {
 
         Column {
 
-            WindowDraggableArea { DraggableArea(state, { exitApp.invoke() }, langIndex, {langIndex = it}, itemSize) }
+            WindowDraggableArea { DraggableArea(state, { exitApp.invoke() }, langIndex, {langIndex = it}, itemSize, rootDirectory, {rootDirectory = it}) }
 
             TopBar({searchIndex = it}, tfText, {tfText = it}, itemSize, {itemSize = it}, labels, {sortIndex = it}, mouseClickPosition)
 

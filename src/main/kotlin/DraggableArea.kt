@@ -31,12 +31,13 @@ fun DraggableArea(
     close: () -> Unit,
     langIndex: Int,
     langLamb: (Int) -> Unit,
-    itemSize: Float
+    itemSize: Float,
+    rootDirectory: String,
+    rootDirLamb: (String) -> Unit
 ) {
 
     var hover by remember { mutableStateOf(false) }
     var enableLOGOShadow by remember { mutableStateOf(DirManipulations.loadSettings().logo) }
-    var rootDirectory by remember { mutableStateOf(DirManipulations.loadSettings().rootDirectory) }
     val fileChooser = JFileChooser()
         fileChooser.fileSelectionMode = JFileChooser.DIRECTORIES_ONLY
 
@@ -55,8 +56,9 @@ fun DraggableArea(
                 langLamb = langLamb,
                 rootDirectory = {
                     fileChooser.showDialog(null, "Select")
-                    rootDirectory = if (fileChooser.selectedFile != null) fileChooser.selectedFile.path else ""
-                    DirManipulations.saveSettings(state, langIndex, enableLOGOShadow, itemSize, rootDirectory)
+                    rootDirLamb( if (fileChooser.selectedFile != null) fileChooser.selectedFile.path else "" )
+                    DirManipulations.saveSettings(state, langIndex, enableLOGOShadow, itemSize,
+                        if (fileChooser.selectedFile != null) fileChooser.selectedFile.path else "" )
                 },
                 exit = {
                     DirManipulations.saveSettings(state, langIndex, enableLOGOShadow, itemSize, rootDirectory)

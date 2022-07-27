@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "Exidel"
-version = "1.0.0"
+version = "1.0.2"
 
 repositories {
     google()
@@ -30,8 +30,8 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Exe)
             packageName = "THE_Catalogue"
-            packageVersion = "1.0.0"
-            version = "1.0.0-stable"
+            packageVersion = "1.0.2"
+            version = "1.0.2-stable"
             vendor = "Exidel"
             description = "Shell for working with material libraries"
             windows {
