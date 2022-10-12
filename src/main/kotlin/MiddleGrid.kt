@@ -1,4 +1,6 @@
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -12,6 +14,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
@@ -24,7 +27,8 @@ fun MiddleGrid(
     list: MutableList<String>,
     size: Float,
     selectedItemsList: SnapshotStateList<String>,
-    selectedItem: (String) -> Unit,
+    selectedItem: String,
+    selectedItemLamb: (String) -> Unit,
     labels: Labels,
     sortIndex: Int
 ) {
@@ -33,7 +37,20 @@ fun MiddleGrid(
     var deleteIcon by mutableStateOf(selectedItemsList.isNotEmpty())
     var deleteDialog by remember { mutableStateOf(false) }
 
+/** Selected item alpha animation */
+    val infiniteTransition = rememberInfiniteTransition()
+    val alpha by infiniteTransition.animateFloat(
+        initialValue = 0.3f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = keyframes {
+                durationMillis = 1000
+            },
+            repeatMode = RepeatMode.Reverse
+        )
+    )
 
+/** main UI */
     Column(Modifier.padding(start = 250.dp, end = 250.dp).fillMaxSize().background(BasicColors.primaryBGColor).padding(10.dp)) {
 
         AnimatedVisibility(
@@ -85,16 +102,18 @@ fun MiddleGrid(
                                 modifier = Modifier
                                     .aspectRatio(1f)
                                     .size(size.dp)
+                                    .border(4.dp, if (selectedItem == _item) BasicColors.tertiaryBGColor.copy(alpha) else Color.Transparent, RoundedCornerShape(4.dp))
                                     .combinedClickable(
-                                        onClick = { selectedItem(_item) },
+                                        onClick = { selectedItemLamb(_item) },
                                         onDoubleClick = {
-                                            selectedItem(_item)
+                                            selectedItemLamb(_item)
                                             DirManipulations.openDir( Path(_item).parent.pathString )
                                         }
                                     )
+                                    .padding(if (selectedItem == _item) 10.dp else 0.dp)
                             ) {
 
-                                Box(Modifier.fillMaxSize()) {
+                                Box {
 
                                     if (_item != "" && Path(_item).exists()) {
                                         Image(
