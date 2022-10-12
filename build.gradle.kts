@@ -33,7 +33,7 @@ compose.desktop {
             packageVersion = "1.0.2"
             version = "1.0.2-stable"
             vendor = "Exidel"
-            description = "Shell for working with material libraries"
+            description = "The_Catalogue"
             windows {
                     iconFile.set(project.file("src\\main\\resources\\catalogue.ico"))
             }

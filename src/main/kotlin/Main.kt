@@ -22,7 +22,8 @@ fun main() = application {
             state = state,
             onCloseRequest = ::exitApplication,
             undecorated = true,
-            icon = painterResource("catalogue.ico")
+            icon = painterResource("catalogue.ico"),
+            title = "The_Catalogue"
         ) {
 
             MaterialTheme {
