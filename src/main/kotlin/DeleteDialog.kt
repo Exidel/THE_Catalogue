@@ -22,6 +22,7 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,6 +54,7 @@ fun DeleteDialog(
         WindowDraggableArea {
 
             Box(Modifier.padding(8.dp)) {
+
 /** Shadows for Dialog icon & buttons */
                 Box(
                     Modifier
@@ -90,13 +92,14 @@ fun DeleteDialog(
                     Modifier
                         .padding(top = 24.dp, bottom = 12.dp)
                         .heightIn(min = 100.dp, max = 200.dp)
+                        .widthIn(min = 260.dp, max = Dp.Unspecified)
                         .shadow(8.dp, RoundedCornerShape(8.dp), false)
                         .background(BasicColors.primaryBGColor, RoundedCornerShape(8.dp))
                         .border(2.dp, BasicColors.tertiaryBGColor, RoundedCornerShape(8.dp))
                         .padding(start = 20.dp, end = 20.dp, top = 32.dp, bottom = 32.dp)
                 ) {
 
-                    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                    Column(verticalArrangement = Arrangement.spacedBy(20.dp), modifier = Modifier.widthIn(min = 260.dp)) {
 
                         Text(
                             text = labels.message,
