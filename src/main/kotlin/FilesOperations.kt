@@ -223,24 +223,33 @@ object DirManipulations {
 
     /** load settings.txt */
     fun loadSettings(): Settings {
-        val list = if (File("settings.txt").exists()) File("settings.txt").readLines() else listOf()
-        var obj = Settings()
+        val list = mutableListOf<String>()
 
         try {
-            obj = if (list.isNotEmpty()) Settings(
-                winSize = if (list[0].isNotEmpty() && list[1].isNotEmpty() && list.lastIndex >= 1)
-                    DpSize(list[0].toFloat().dp, list[1].toFloat().dp) else Settings().winSize,
-                winPosition = if ( !list[2].contains("NaN", true) && !list[3].contains("NaN", true) &&
-                    list[2].isNotEmpty() && list[3].isNotEmpty() && list.lastIndex >= 3)
-                    WindowPosition(list[2].toFloat().dp, list[3].toFloat().dp) else Settings().winPosition,
-                lang = if (list[4].isNotEmpty() && list.lastIndex >= 4) list[4].toInt() else Settings().lang,
-                logo = if (list[5].isNotEmpty() && list.lastIndex >= 5) list[5].toBoolean() else Settings().logo,
-                itemSize = if (list[6].isNotEmpty() && list.lastIndex >= 6) list[6].toFloat() else Settings().itemSize,
-                rootDirectory = if (list[7].isNotEmpty() && list.lastIndex >= 7) list[7] else Settings().rootDirectory
-            ) else Settings()
+           val fileContent = if (File("settings.txt").exists()) File("settings.txt").readLines() else listOf()
+            list.addAll(fileContent)
         } catch (e: Exception) { File("settingsErrorLog.txt").writeText(e.stackTraceToString()) }
 
-        return obj
+        var winSize = Settings().winSize
+        var winPosition = Settings().winPosition
+        var lang = Settings().lang
+        var logo = Settings().logo
+        var itemSize = Settings().itemSize
+        var rootDirectory = Settings().rootDirectory
+
+        return if (list.isEmpty()) {
+            Settings()
+        } else {
+
+            try { winSize = DpSize(list[0].toFloat().dp, list[1].toFloat().dp) } catch (e: Exception) {  }
+            try { winPosition = WindowPosition(list[2].toFloat().dp, list[3].toFloat().dp) } catch (e: Exception) {  }
+            try { lang = list[4].toInt() } catch (e: Exception) {  }
+            try { logo = list[5].toBoolean() } catch (e: Exception) {  }
+            try { itemSize = list[6].toFloat() } catch (e: Exception) {  }
+            try { rootDirectory = list[7] } catch (e: Exception) {  }
+
+            Settings(winSize, winPosition, lang, logo, itemSize, rootDirectory)
+        }
 
     }
 
